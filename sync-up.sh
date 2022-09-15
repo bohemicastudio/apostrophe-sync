@@ -1,7 +1,5 @@
 #!/usr/bin/bash
 
-#many script taken directly from https://github.com/CloudRaker/tfp-heartland/blob/master/scripts/sync-up
-
 if [ ! -f ".env" ]
 then
    echo ".env file not found!"
@@ -10,29 +8,26 @@ fi
 
 source ./.env
 
-## copy local database
 stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$LOCAL_DB-$stamp.mongodump
 
-### use --gzip
+remote_ssh="-p $SERVER_SSH_PORT $SERVER"
+server_ssh="$SERVER_USER@$SERVER_IP"
+server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
 
-# db.createUser( { user: "myuser", pwd: "password", roles: ["readWrite"] })
+
+# Create local archive
 mongodump -d $LOCAL_DB --archive=./$filename
 
-SSH_PORT=22
-remoteSSH="-p $SSH_PORT $SERVER_ROOT"
-rsyncTransport="ssh -p $SSH_PORT"
-rsyncDestination="$SERVER_ROOT"
-
-## move and remove archive
-rsync -av -e "$rsyncTransport" ./$filename $rsyncDestination:$SERVER_PATH/$filename
+# Transport archive and remove local
+rsync -av -e "ssh -p $SERVER_SSH_PORT" ./$filename $server_ssh:$SERVER_PATH/$filename
 rm -rf ./$filename
 
-## backup remote copy
-ssh $remoteSSH "mongodump --uri=$SERVER_DB --archive >> $SERVER_PATH/$filename.bak"
+# Backup remote copy
+ssh $remote_ssh "mongodump --uri=$server_uri --archive >> $SERVER_PATH/$filename.bak"
 
-## apply new data
-ssh $remoteSSH "mongorestore --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --noIndexRestore --drop --nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.* --archive=$SERVER_PATH/$filename"
+# Apply local data to remote
+ssh $remote_ssh "mongorestore --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --noIndexRestore --drop --nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.* --archive=$SERVER_PATH/$filename"
 
-## remove carried data stuff
-ssh $remoteSSH rm -rf $SERVER_PATH/$filename
+# Remove carried archive
+ssh $remote_ssh "rm -rf $SERVER_PATH/$filename"
