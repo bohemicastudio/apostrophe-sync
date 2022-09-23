@@ -32,4 +32,4 @@ fi
 
 
 # Sync script
-rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT" $LOCAL_PATH/public/ $server_ssh:$SERVER_PATH/public
+rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT" $LOCAL_UPLOAD_FOLDER_PATH/public/ $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/public

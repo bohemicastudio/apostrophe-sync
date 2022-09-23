@@ -19,4 +19,4 @@ fi
 
 
 # Sync script
-rsync -av $dry -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_PATH/public/ $LOCAL_PATH/public
+rsync -av $dry -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/public/ $LOCAL_UPLOAD_FOLDER_PATH/public

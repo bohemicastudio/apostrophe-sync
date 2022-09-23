@@ -17,19 +17,20 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 
 
 # Create local archive
-mongodump -d $LOCAL_DB --archive=./$filename
+mongodump -d $LOCAL_DB --archive=./$filename &&
 
 # Transport archive
-rsync -av -e "ssh -p $SERVER_SSH_PORT" ./$filename $server_ssh:$SERVER_PATH/$filename
+rsync -av -e "ssh -p $SERVER_SSH_PORT" ./$filename $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/$filename &&
 
-# Remove the local file
-rm -rf ./$filename
+rm -rf ./$filename &&
 
 # Backup remote copy
-ssh $remote_ssh "mongodump --uri=$server_uri --archive >> $SERVER_PATH/$SERVER_DB_NAME-$stamp.mongodump.bak"
+ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $SERVER_UPLOAD_FOLDER_PATH/$SERVER_DB_NAME-$stamp.mongodump.bak" &&
 
 # Apply local data to remote
-ssh $remote_ssh "mongorestore --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --noIndexRestore --drop --nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.* --archive=$SERVER_PATH/$filename"
+ssh $remote_ssh "mongorestore --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --noIndexRestore --drop --nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.* --archive=$SERVER_UPLOAD_FOLDER_PATH/$filename" &&
+
+ssh $remote_ssh "rm -rf $SERVER_UPLOAD_FOLDER_PATH/$filename" &&
 
 # Remove carried archive
-ssh $remote_ssh "rm -rf $SERVER_PATH/$filename"
+exit 0

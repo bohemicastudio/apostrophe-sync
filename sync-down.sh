@@ -17,13 +17,13 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 
 
 # Create remote archive
-ssh $remote_ssh "mongodump --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $SERVER_PATH/$filename"
+ssh $remote_ssh "mongodump --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $SERVER_UPLOAD_FOLDER_PATH/$filename"
 
 # Download archive
-rsync -av -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_PATH/$filename ./$filename 
+rsync -av -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/$filename ./$filename 
 
 # Remove remote archive
-ssh $remote_ssh "rm -rf $SERVER_PATH/$filename"
+ssh $remote_ssh "rm -rf $SERVER_UPLOAD_FOLDER_PATH/$filename"
 
 # Backup local database
 mongodump -d $LOCAL_DB --archive=./$LOCAL_DB-$stamp.mongodump.bak
