@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+Color_Off='\033[0m'
+On_Blue='\033[44m'
+
 if [ ! -f ".env" ]
 then
    echo ".env file not found!"
@@ -19,4 +22,8 @@ fi
 
 
 # Sync script
-rsync -av $dry -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/public/ $LOCAL_UPLOAD_FOLDER_PATH/public
+echo -e "${On_Blue}:: Synchronize /uploads folders${Color_Off}" &&
+rsync -av $dry -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/public/ $LOCAL_UPLOAD_FOLDER_PATH/public &&
+
+echo -e "${On_Blue}:: DONE${Color_Off}" &&
+exit 0
