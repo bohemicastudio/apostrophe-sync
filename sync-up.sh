@@ -13,6 +13,7 @@ source ./.env
 
 stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$LOCAL_DB-$stamp.mongodump
+backup=$SERVER_DB_NAME-$stamp.mongodump.bak
 
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-p $SERVER_SSH_PORT $server_ssh"
@@ -33,11 +34,13 @@ rm -rf ./$filename &&
 
 # Backup remote copy
 echo -e "${On_Blue}:: Backup remote copy${Color_Off}" &&
-ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $SERVER_UPLOAD_FOLDER_PATH/$SERVER_DB_NAME-$stamp.mongodump.bak" &&
+ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $SERVER_UPLOAD_FOLDER_PATH/$backup" &&
 
 # Apply local data to remote
-echo -e "${On_Blue}:: Apply local data to remote${Color_Off}" &&
-ssh $remote_ssh "mongorestore --username=$SERVER_DB_USER --password=$SERVER_DB_PASS --noIndexRestore --drop --nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.* --archive=$SERVER_UPLOAD_FOLDER_PATH/$filename" &&
+echo -e "${On_Blue}:: Apply local data to remote${Color_Off}"
+up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS"
+ns="--nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.*"
+ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$SERVER_UPLOAD_FOLDER_PATH/$filename" &&
 
 # Remove transported archive
 echo -e "${On_Blue}:: Remove transported archive${Color_Off}" &&
