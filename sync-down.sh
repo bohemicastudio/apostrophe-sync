@@ -13,7 +13,7 @@ source ./.env
 
 stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$SERVER_DB_NAME-$stamp.mongodump
-backup=$LOCAL_DB-$stamp.mongodump.bak
+backup=$LOCAL_DB_NAME-$stamp.mongodump.bak
 
 local_file=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$filename
 local_bak=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$backup
@@ -39,11 +39,11 @@ ssh $remote_ssh "rm -rf $server_file"
 
 # Backup local database
 echo -e "${On_Blue}:: Backup local database${Color_Off}" &&
-mongodump -d $LOCAL_DB --archive=$local_bak
+mongodump -d $LOCAL_DB_NAME --archive=$local_bak
 
 # Apply remote data to local
 echo -e "${On_Blue}:: Apply remote data to local${Color_Off}" &&
-ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB.*"
+ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*"
 mongorestore --noIndexRestore --drop ${ns} --archive=$local_file
 
 # Remove carried archive

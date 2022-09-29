@@ -12,7 +12,7 @@ fi
 source ./.env
 
 stamp=$(date +"%Y-%m-%d-%H%M")
-filename=$LOCAL_DB-$stamp.mongodump
+filename=$LOCAL_DB_NAME-$stamp.mongodump
 backup=$SERVER_DB_NAME-$stamp.mongodump.bak
 
 local_file=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$filename
@@ -26,7 +26,7 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 
 # Create local archive
 echo -e "${On_Blue}:: Create local archive${Color_Off}" &&
-mongodump -d $LOCAL_DB --archive=$local_file &&
+mongodump -d $LOCAL_DB_NAME --archive=$local_file &&
 
 # Transport archive
 echo -e "${On_Blue}:: Transport archive${Color_Off}" &&
@@ -43,7 +43,7 @@ ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $serve_bak" &&
 # Apply local data to remote
 echo -e "${On_Blue}:: Apply local data to remote${Color_Off}"
 up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS"
-ns="--nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.*"
+ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$SERVER_DB_NAME.*"
 ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$server_file" &&
 
 # Remove transported archive
