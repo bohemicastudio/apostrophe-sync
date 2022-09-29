@@ -37,7 +37,7 @@ fi
 
 # Sync script
 echo -e "${On_Blue}:: Synchronize /uploads folders${Color_Off}" &&
-rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT" $LOCAL_UPLOAD_FOLDER_PATH/public/ $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/public &&
+rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT" $LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
 
 echo -e "${On_Blue}:: DONE${Color_Off}" &&
 exit 0

@@ -15,6 +15,10 @@ stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$LOCAL_DB-$stamp.mongodump
 backup=$SERVER_DB_NAME-$stamp.mongodump.bak
 
+local_file=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$filename
+server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
+server_bak=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$backup
+
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-p $SERVER_SSH_PORT $server_ssh"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
@@ -22,29 +26,29 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 
 # Create local archive
 echo -e "${On_Blue}:: Create local archive${Color_Off}" &&
-mongodump -d $LOCAL_DB --archive=./$filename &&
+mongodump -d $LOCAL_DB --archive=$local_file &&
 
 # Transport archive
 echo -e "${On_Blue}:: Transport archive${Color_Off}" &&
-rsync -av -e "ssh -p $SERVER_SSH_PORT" ./$filename $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/$filename &&
+rsync -av -e "ssh -p $SERVER_SSH_PORT" $local_file $server_ssh:$server_file &&
 
 # Remove the local archive
 echo -e "${On_Blue}:: Remove the local archive${Color_Off}" &&
-rm -rf ./$filename &&
+rm -rf $local_file &&
 
 # Backup remote copy
 echo -e "${On_Blue}:: Backup remote copy${Color_Off}" &&
-ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $SERVER_UPLOAD_FOLDER_PATH/$backup" &&
+ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $serve_bak" &&
 
 # Apply local data to remote
 echo -e "${On_Blue}:: Apply local data to remote${Color_Off}"
 up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS"
 ns="--nsInclude=$LOCAL_DB.* --nsFrom=$LOCAL_DB.* --nsTo=$SERVER_DB_NAME.*"
-ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$SERVER_UPLOAD_FOLDER_PATH/$filename" &&
+ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$server_file" &&
 
 # Remove transported archive
 echo -e "${On_Blue}:: Remove transported archive${Color_Off}" &&
-ssh $remote_ssh "rm -rf $SERVER_UPLOAD_FOLDER_PATH/$filename" &&
+ssh $remote_ssh "rm -rf $server_file" &&
 
 echo -e "${On_Blue}:: DONE${Color_Off}" &&
 exit 0

@@ -15,6 +15,10 @@ stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$SERVER_DB_NAME-$stamp.mongodump
 backup=$LOCAL_DB-$stamp.mongodump.bak
 
+local_file=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$filename
+local_bak=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$backup
+server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
+
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-p $SERVER_SSH_PORT $server_ssh"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
@@ -23,27 +27,28 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 # Create remote archive
 echo -e "${On_Blue}:: Create local archive${Color_Off}"
 up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS"
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $SERVER_UPLOAD_FOLDER_PATH/$filename"
+ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file"
 
 # Download archive
 echo -e "${On_Blue}:: Download archive${Color_Off}" &&
-rsync -av -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$SERVER_UPLOAD_FOLDER_PATH/$filename ./$filename 
+rsync -av -e "ssh -p $SERVER_SSH_PORT" $server_ssh:$server_file $local_file 
 
 # Remove remote archive
 echo -e "${On_Blue}:: Remove remote archive${Color_Off}" &&
-ssh $remote_ssh "rm -rf $SERVER_UPLOAD_FOLDER_PATH/$filename"
+ssh $remote_ssh "rm -rf $server_file"
 
 # Backup local database
 echo -e "${On_Blue}:: Backup local database${Color_Off}" &&
-mongodump -d $LOCAL_DB --archive=./$backup
+mongodump -d $LOCAL_DB --archive=$local_bak
 
 # Apply remote data to local
 echo -e "${On_Blue}:: Apply remote data to local${Color_Off}" &&
-mongorestore --noIndexRestore --drop --nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB.* --archive=./$filename
+ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB.*"
+mongorestore --noIndexRestore --drop ${ns} --archive=$local_file
 
 # Remove carried archive
 echo -e "${On_Blue}:: Remove transported archive${Color_Off}" &&
-rm -rf ./$filename
+rm -rf $local_file
 
 echo -e "${On_Blue}:: DONE${Color_Off}" &&
 exit 0
