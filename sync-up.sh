@@ -1,26 +1,38 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 Color_Off='\033[0m'
+On_Yellow='\033[43m'
 On_Blue='\033[44m'
 
-if [ ! -f ".env" ]
-then
-   echo ".env file not found!"
-   exit 1
+scriptdir="$(dirname "$0")"
+
+if [ ! -f "$scriptdir/.env" ]; then
+  echo -e "${On_Yellow}:: .env file not found${Color_Off}"
+  exit 1
+else
+  echo -e "${On_Yellow}:: .env file found${Color_Off}"
 fi
 
-source ./.env
+source $scriptdir/.env
+
+key=""
+if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
+  key=""
+  echo -e "${On_Yellow}:: Private SSH key is not set${Color_Off}"
+else
+  key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
+fi
 
 stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$LOCAL_DB_NAME-$stamp.mongodump
 backup=$SERVER_DB_NAME-$stamp.mongodump.bak
 
-local_file=$LOCAL_MONGO_BAKUPS_FOLDER_PATH/$filename
+local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
 server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
 server_bak=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$backup
 
 server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-p $SERVER_SSH_PORT $server_ssh"
+remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
 
 
