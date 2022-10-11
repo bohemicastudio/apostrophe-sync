@@ -4,6 +4,7 @@ Styling_Off='\033[0m'
 Yellow_On='\033[43m'
 Blue_On='\033[44m'
 Bold_On='\033[1m'
+Dots="${Blue_On}::${Styling_Off}"
 
 scriptdir="$(dirname "$0")"
 
@@ -45,7 +46,10 @@ fi
 # Sync script
 # private key - ideally use a config file: https://unix.stackexchange.com/a/127355
 echo -e "${Blue_On}:: Synchronize /uploads folders${Styling_Off}" &&
-  echo "-- From: .$LOCAL_UPLOADS_FOLDER_PATH -- To: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
-  rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $key" .$LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
-  echo -e "${Blue_On}:: DONE${Styling_Off}" &&
-  exit 0
+echo -e "$Dots From: .$LOCAL_UPLOADS_FOLDER_PATH" &&
+echo -e "$Dots From: To: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
+
+rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $key" .$LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
+
+echo -e "${Blue_On}:: DONE${Styling_Off}" &&
+exit 0

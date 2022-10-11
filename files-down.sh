@@ -3,6 +3,7 @@
 Styling_Off='\033[0m'
 Yellow_On='\033[43m'
 Blue_On='\033[44m'
+Dots="${Blue_On}::${Styling_Off}"
 
 scriptdir="$(dirname "$0")"
 
@@ -26,13 +27,16 @@ else
 fi
 
 dry=""
-if [ "$1" == "-d" ] || [ "$1" == "--dry" ] || [ "$2" == "-d" ] || [ "$2" == "--dry" ]; then
+if [ "$1" == "-d" ] || [ "$1" == "--dry" ]; then
   dry="--dry-run"
 fi
 
 # Sync script
 echo -e "${Blue_On}:: Synchronize /uploads folders${Styling_Off}" &&
-  echo "-- From: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH -- To: .$LOCAL_UPLOADS_FOLDER_PATH" &&
-  rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ .$LOCAL_UPLOADS_FOLDER_PATH &&
-  echo -e "${Blue_On}:: DONE${Styling_Off}" &&
-  exit 0
+echo -e "$Dots From: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
+echo -e "$Dots To: $scriptdir/$LOCAL_UPLOADS_FOLDER_PATH" &&
+
+rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $scriptdir/$LOCAL_UPLOADS_FOLDER_PATH &&
+
+echo -e "${Blue_On}:: DONE${Styling_Off}" &&
+exit 0

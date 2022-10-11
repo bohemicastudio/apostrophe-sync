@@ -3,6 +3,7 @@
 Styling_Off='\033[0m'
 Yellow_On='\033[43m'
 Blue_On='\033[44m'
+Dots="${Blue_On}::${Styling_Off}"
 
 scriptdir="$(dirname "$0")"
 
@@ -37,30 +38,36 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$ser
 
 
 # Create remote archive
-echo -e "${Blue_On}:: Create local archive${Styling_Off}"
-up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS"
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file"
+echo -e "${Blue_On}:: Create local archive${Styling_Off}" &&
+up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
+echo -e "$Dots ssh $remote_ssh \"mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file\"" &&
+ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file" &&
 
 # Download archive
 echo -e "${Blue_On}:: Download archive${Styling_Off}" &&
-rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file .$local_file
+echo -e "$Dots rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" $server_ssh:$server_file $local_file" &&
+rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file $local_file &&
 
 # Remove remote archive
 # echo -e "${Blue_On}:: Remove remote archive${Styling_Off}" &&
-# ssh $remote_ssh "rm -rf $server_file"
+# echo -e "$Dots ssh $remote_ssh \"rm -rf $server_file\"" &&
+# ssh $remote_ssh "rm -rf $server_file" &&
 
 # Backup local database
 echo -e "${Blue_On}:: Backup local database${Styling_Off}" &&
-mongodump -d $LOCAL_DB_NAME --archive=.$local_backup
+echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=.$local_backup" &&
+mongodump -d $LOCAL_DB_NAME --archive=.$local_backup &&
 
 # Apply remote data to local
 echo -e "${Blue_On}:: Apply remote data to local${Styling_Off}" &&
-ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*"
-mongorestore --noIndexRestore --drop ${ns} --archive=.$local_file
+ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*" &&
+echo -e "$Dots mongorestore --noIndexRestore --drop ${ns} --archive=.$local_file" &&
+mongorestore --noIndexRestore --drop ${ns} --archive=.$local_file &&
 
 # Remove carried archive
 echo -e "${Blue_On}:: Remove transported archive${Styling_Off}" &&
-rm -rf .$local_file
+echo -e "$Dots rm -rf .$local_file" &&
+rm -rf .$local_file &&
 
 echo -e "${Blue_On}:: DONE${Styling_Off}" &&
 exit 0
