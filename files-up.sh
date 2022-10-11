@@ -43,13 +43,18 @@ if [ "$1" == "-f" ] || [ "$1" == "--force" ] || [ "$2" == "-f" ] || [ "$2" == "-
   fi
 fi
 
+if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  LOCAL_UPLOADS_FOLDER_PATH=".$LOCAL_UPLOADS_FOLDER_PATH"
+fi
+
 # Sync script
 # private key - ideally use a config file: https://unix.stackexchange.com/a/127355
 echo -e "${Blue_On}:: Synchronize /uploads folders${Styling_Off}" &&
-echo -e "$Dots From: .$LOCAL_UPLOADS_FOLDER_PATH" &&
+echo -e "$Dots From: $LOCAL_UPLOADS_FOLDER_PATH" &&
 echo -e "$Dots From: To: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $key" .$LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
+rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $key" $LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
 
 echo -e "${Blue_On}:: DONE${Styling_Off}" &&
 exit 0

@@ -32,6 +32,11 @@ local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
 server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
 server_bak=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$backup
 
+if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  local_file=".$local_file"
+fi
+
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
@@ -39,13 +44,13 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_D
 
 # Create local archive
 echo -e "${Blue_On}:: Create local archive${Styling_Off}" &&
-echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=.$local_file" &&
-mongodump -d $LOCAL_DB_NAME --archive=.$local_file &&
+echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=$local_file" &&
+mongodump -d $LOCAL_DB_NAME --archive=$local_file &&
 
 # Transport archive
 echo -e "${Blue_On}:: Transport archive${Styling_Off}" &&
-echo -e "$Dots rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" .$local_file $server_ssh:$server_file" &&
-rsync -av -e "ssh -p $SERVER_SSH_PORT $key" .$local_file $server_ssh:$server_file &&
+echo -e "$Dots rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" $local_file $server_ssh:$server_file" &&
+rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $local_file $server_ssh:$server_file &&
 
 # Remove the local archive
 # echo -e "${Blue_On}:: Remove the local archive${Styling_Off}" &&

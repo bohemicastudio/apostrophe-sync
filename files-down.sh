@@ -31,12 +31,17 @@ if [ "$1" == "-d" ] || [ "$1" == "--dry" ]; then
   dry="--dry-run"
 fi
 
+if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  LOCAL_UPLOADS_FOLDER_PATH=".$LOCAL_UPLOADS_FOLDER_PATH"
+fi
+
 # Sync script
 echo -e "${Blue_On}:: Synchronize /uploads folders${Styling_Off}" &&
 echo -e "$Dots From: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
-echo -e "$Dots To: $scriptdir/$LOCAL_UPLOADS_FOLDER_PATH" &&
+echo -e "$Dots To: $LOCAL_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $scriptdir/$LOCAL_UPLOADS_FOLDER_PATH &&
+rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $LOCAL_UPLOADS_FOLDER_PATH &&
 
 echo -e "${Blue_On}:: DONE${Styling_Off}" &&
 exit 0

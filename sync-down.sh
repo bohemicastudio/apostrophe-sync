@@ -32,6 +32,12 @@ local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
 local_backup=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$backup
 server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
 
+if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  local_file=".$local_file"
+  local_backup=".$local_backup"
+fi
+
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
@@ -55,18 +61,18 @@ rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file $local_file
 
 # Backup local database
 echo -e "${Blue_On}:: Backup local database${Styling_Off}" &&
-echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=.$local_backup" &&
-mongodump -d $LOCAL_DB_NAME --archive=.$local_backup &&
+echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
 
 # Apply remote data to local
 echo -e "${Blue_On}:: Apply remote data to local${Styling_Off}" &&
 ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*" &&
-echo -e "$Dots mongorestore --noIndexRestore --drop ${ns} --archive=.$local_file" &&
-mongorestore --noIndexRestore --drop ${ns} --archive=.$local_file &&
+echo -e "$Dots mongorestore --noIndexRestore --drop ${ns} --archive=$local_file" &&
+mongorestore --noIndexRestore --drop ${ns} --archive=$local_file &&
 
 # Remove carried archive
 echo -e "${Blue_On}:: Remove transported archive${Styling_Off}" &&
-echo -e "$Dots rm -rf .$local_file" &&
+echo -e "$Dots rm -rf $local_file" &&
 rm -rf .$local_file &&
 
 echo -e "${Blue_On}:: DONE${Styling_Off}" &&
