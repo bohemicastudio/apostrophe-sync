@@ -7,7 +7,7 @@ Italics_On='\033[3m'
 Underline_On='\033[4m'
 
 scriptdir="$(dirname "$0")"
-# TODO - yes/no confirmation for each option + show relevant variables
+
 if [ $# -eq 0 ]; then
   echo -e "${Bold_On}:: Uploads (server ↑):${Styling_Off}"
   echo -e "   [${Underline_On}1${Styling_Off}] Sync up database && files"
