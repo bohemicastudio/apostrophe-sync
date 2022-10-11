@@ -1,14 +1,13 @@
 #!/bin/bash
 
-Styling_Off='\033[0m'
-Yellow_On='\033[43m'
-Blue_On='\033[44m'
-Dots="${Blue_On}::${Styling_Off}"
-
+## Shared resources
 scriptdir="$(dirname "$0")"
+source $scriptdir/.shared.sh
 
+
+## Local .env resources
 if [ ! -f "$scriptdir/.env" ]; then
-  echo -e "${Yellow_On}:: .env file not found${Styling_Off}"
+  Alert ".env file not found"
   exit 1
 else
   echo -e ":: .env file found"
@@ -16,14 +15,18 @@ fi
 
 source $scriptdir/.env
 
+
+## Verify available SSH key
 key=""
 if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
   key=""
-  echo -e "${Yellow_On}:: Private SSH key is not set${Styling_Off}"
+  Alert "Private SSH key is not set"
 else
   key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
 fi
 
+
+## Setup core variables
 stamp=$(date +"%Y-%m-%d-%H%M")
 filename=$SERVER_DB_NAME-$stamp.mongodump
 backup=$LOCAL_DB_NAME-$stamp.mongodump.bak
@@ -43,37 +46,50 @@ remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
 
 
+## Run the script
+
 # Create remote archive
-echo -e "${Blue_On}:: Create local archive${Styling_Off}" &&
+echoTitle "Create local archive" &&
 up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
-echo -e "$Dots ssh $remote_ssh \"mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file\"" &&
+echoCmd "ssh $remote_ssh \"mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file\"" &&
+
 ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file" &&
 
+
 # Download archive
-echo -e "${Blue_On}:: Download archive${Styling_Off}" &&
-echo -e "$Dots rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" $server_ssh:$server_file $local_file" &&
+echoTitle "Download archive" &&
+echoCmd "rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" $server_ssh:$server_file $local_file" &&
+
 rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file $local_file &&
 
+
 # Remove remote archive
-# echo -e "${Blue_On}:: Remove remote archive${Styling_Off}" &&
-# echo -e "$Dots ssh $remote_ssh \"rm -rf $server_file\"" &&
+# echoTitle "Remove remote archive" &&
+# echoCmd "ssh $remote_ssh \"rm -rf $server_file\"" &&
 # ssh $remote_ssh "rm -rf $server_file" &&
 
+
 # Backup local database
-echo -e "${Blue_On}:: Backup local database${Styling_Off}" &&
-echo -e "$Dots mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+echoTitle "Backup local database" &&
+echoCmd "$mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+
 mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
 
+
 # Apply remote data to local
-echo -e "${Blue_On}:: Apply remote data to local${Styling_Off}" &&
+echoTitle "Apply remote data to local" &&
 ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*" &&
-echo -e "$Dots mongorestore --noIndexRestore --drop ${ns} --archive=$local_file" &&
+echoCmd "mongorestore --noIndexRestore --drop ${ns} --archive=$local_file" &&
+
 mongorestore --noIndexRestore --drop ${ns} --archive=$local_file &&
 
+
 # Remove carried archive
-echo -e "${Blue_On}:: Remove transported archive${Styling_Off}" &&
-echo -e "$Dots rm -rf $local_file" &&
+echoTitle "Remove transported archive" &&
+echoCmd "rm -rf $local_file" &&
+
 rm -rf .$local_file &&
 
-echo -e "${Blue_On}:: DONE${Styling_Off}" &&
+
+echoTitle "DONE" &&
 exit 0
