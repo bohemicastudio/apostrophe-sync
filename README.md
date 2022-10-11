@@ -8,7 +8,7 @@ Skripty potřebují funknční prostředí `bash`, utility `rsync`, `mongodump`,
 
 ## Použití:
 
-Hlavní spouštěcí skript je `aposync.sh` Jeho samostané spuštění vám dá na výběr z dostupných příkazů a zadáním čísla v závorkách jeden z příkaů spustíte. Pokud si číslo příkazu pamatujete, můžete jej zadat rovnou jako vstupní parametr `aposync.sh N`.
+Hlavní spouštěcí skript je `aposync.sh` Jeho samostané spuštění vám dá na výběr z dostupných příkazů a zadáním čísla v závorkách jeden z příkaů spustíte. Pokud si číslo příkazu pamatujete, můžete jej zadat rovnou jako vstupní parametr `aposync.sh N`, nebo `aposync.sh N -y` pro přeskočení potvrzovací hlášky.
 
 `aposync.sh` pouze spouští zbylé obsažené skripty:
 - `sync-up.sh` na nahrání databáze, z lokálního prostředí na vzdálené

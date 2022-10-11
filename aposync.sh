@@ -7,8 +7,24 @@ Italics_On='\033[3m'
 Underline_On='\033[4m'
 
 scriptdir="$(dirname "$0")"
+gopass=0
 
-if [ $# -eq 0 ]; then
+if [ $# -eq 2 ]; then
+
+  if [ $1 == "-y" ]; then
+    gopass=1
+    type="$2"
+  elif [ $2 == "-y" ]; then
+    gopass=1
+    type="$1"
+  else
+    echo ":: Unexpected parameters"
+    exit 1
+  fi
+
+elif [ $# -eq 1 ]; then
+  type="$1"
+else
   echo -e "${Bold_On}:: Uploads (server ↑):${Styling_Off}"
   echo -e "   [${Underline_On}1${Styling_Off}] Sync up database && files"
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
@@ -27,89 +43,108 @@ if [ $# -eq 0 ]; then
   echo -e "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview"
 
   read type
-else
-  type="$1"
 fi
+
+
 
 if [ $type -eq 1 ]; then
   echo -e "${Blue_On}:: Sync up database && files ${Styling_Off}"
-  echo "::Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/sync-up.sh && $scriptdir/files-up.sh && exit 0
   fi
-fi
 
-if [ $type -eq 10 ]; then
+
+elif [ $type -eq 10 ]; then
   echo -e "${Blue_On}:: Sync up database ${Styling_Off}"
   echo "::Run the command? [Yes/No]"
   read go
   if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/sync-up.sh && exit 0
   fi
-fi
 
-if [ $type -eq 11 ]; then
+
+elif [ $type -eq 11 ]; then
   echo -e "${Blue_On}:: Sync up files ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/files-up.sh && exit 0
   fi
-fi
 
-if [ $type -eq 110 ]; then
+
+elif [ $type -eq 110 ]; then
   echo -e "${Blue_On}:: Sync up files - preview ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/files-up.sh -d && exit 0
   fi
-fi
 
-if [ $type -eq 111 ]; then
+
+elif [ $type -eq 111 ]; then
   echo -e "${Blue_On}:: Sync up files - forced delete ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/files-up.sh -f && exit 0
   fi
-fi
 
-if [ $type -eq 2 ]; then
+
+elif [ $type -eq 2 ]; then
   echo -e "${Blue_On}:: Sync down database && files ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/sync-down.sh && $scriptdir/files-down.sh && exit 0
   fi
-fi
 
-if [ $type -eq 20 ]; then
+
+elif [ $type -eq 20 ]; then
   echo -e "${Blue_On}:: Sync down database ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/sync-down.sh && exit 0
   fi
-fi
 
-if [ $type -eq 21 ]; then
+
+elif [ $type -eq 21 ]; then
   echo -e "${Blue_On}:: Sync down files ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/files-down.sh && exit 0
   fi
-fi
 
-if [ $type -eq 210 ]; then
+
+elif [ $type -eq 210 ]; then
   echo -e "${Blue_On}:: Sync down files - preview ${Styling_Off}"
-  echo ":: Run the command? [Yes/No]"
-  read go
-  if [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  if [ $gopass == 0 ]; then
+    echo "::Run the command? [Yes/No]"
+    read go
+  fi
+  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
     $scriptdir/files-down.sh -d && exit 0
   fi
-fi
 
-exit 1
+
+else
+  echo ":: Unsupported action"
+  exit 2
+fi
