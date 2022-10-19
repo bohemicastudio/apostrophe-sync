@@ -28,8 +28,8 @@ fi
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d-%H%M")
-filename=$SERVER_DB_NAME-$stamp.mongodump
-backup=$LOCAL_DB_NAME-$stamp.mongodump.bak
+filename="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
+backup="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump.bak"
 
 local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
 local_backup=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$backup
