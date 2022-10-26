@@ -33,7 +33,7 @@ else
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
   # echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server (TODO)"
   # echo -e "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server (TODO)"
-  # echo -e "                      ↳ [${Underline_On}1020${Styling_Off}] List all backup files on server (TODO)"
+  # echo -e "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server (TODO)"
   echo -e "       ↳ [${Underline_On}11${Styling_Off}] Sync up files"
   echo -e "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview"
   echo -e "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete"
@@ -43,7 +43,7 @@ else
   echo -e "       ↳ [${Underline_On}20${Styling_Off}] Sync down database"
   # echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local (TODO)"
   # echo -e "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local (TODO)"
-  # echo -e "                      ↳ [${Underline_On}2020${Styling_Off}] List all backup files on local (TODO)"
+  # echo -e "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local (TODO)"
   echo -e "       ↳ [${Underline_On}21${Styling_Off}] Sync down files"
   echo -e "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview"
 
