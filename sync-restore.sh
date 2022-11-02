@@ -42,6 +42,7 @@ server_backup="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${server_filename}.bak"
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_file=".$local_file"
+  local_backup=".$local_backup"
 fi
 
 server_ssh="$SERVER_USER@$SERVER_IP"
