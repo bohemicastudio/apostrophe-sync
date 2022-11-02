@@ -42,7 +42,7 @@ else
   echo -e "   [${Underline_On}2${Styling_Off}] Sync down database && files"
   echo -e "       ↳ [${Underline_On}20${Styling_Off}] Sync down database"
   # echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local (TODO)"
-  # echo -e "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local (TODO)"
+  echo -e "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local"
   # echo -e "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local (TODO)"
   echo -e "       ↳ [${Underline_On}21${Styling_Off}] Sync down files"
   echo -e "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview"
@@ -103,6 +103,11 @@ elif [ $type -eq 2 ]; then
 elif [ $type -eq 20 ]; then
   if Verify "Sync down database"; then
     $scriptdir/sync-down.sh && exit 0
+  fi
+
+elif [ $type -eq 202 ]; then
+  if Verify "Restore database from local to local"; then
+    $scriptdir/sync-restore.sh && exit 0
   fi
 
 elif [ $type -eq 21 ]; then
