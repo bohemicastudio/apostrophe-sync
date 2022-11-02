@@ -27,9 +27,9 @@ fi
 
 
 ## Setup core variables
-stamp=$(date +"%Y-%m-%d-%H%M")
-filename="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
-backup="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump.bak"
+stamp=$(date +"%Y-%m-%d_%H-%M-%S")
+filename="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
+backup="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump.bak"
 
 local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
 local_backup=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$backup
@@ -71,7 +71,7 @@ rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file $local_file
 
 # Backup local database
 echoTitle "Backup local database" &&
-echoCmd "$mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+echoCmd "mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
 
 mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
 
