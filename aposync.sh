@@ -31,7 +31,7 @@ else
   echo -e "${Bold_On}:: Upload actions (server ↑):${Styling_Off}"
   echo -e "   [${Underline_On}1${Styling_Off}] Sync up database && files"
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
-  # echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server (TODO)"
+  echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server"
   echo -e "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server"
   # echo -e "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server (TODO)"
   echo -e "       ↳ [${Underline_On}11${Styling_Off}] Sync up files"
@@ -41,7 +41,7 @@ else
   echo -e "${Bold_On}:: Download actions (local ↓):${Styling_Off}"
   echo -e "   [${Underline_On}2${Styling_Off}] Sync down database && files"
   echo -e "       ↳ [${Underline_On}20${Styling_Off}] Sync down database"
-  # echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local (TODO)"
+  echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local"
   echo -e "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local"
   # echo -e "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local (TODO)"
   echo -e "       ↳ [${Underline_On}21${Styling_Off}] Sync down files"
@@ -80,9 +80,14 @@ elif [ $type -eq 10 ]; then
     $scriptdir/sync-up.sh && exit 0
   fi
 
+elif [ $type -eq 101 ]; then
+  if Verify "Create backup file on server"; then
+    $scriptdir/backup-server.sh && exit 0
+  fi
+
 elif [ $type -eq 102 ]; then
   if Verify "Restore from file on server"; then
-    $scriptdir/restore-local.sh && exit 0
+    $scriptdir/restore-server.sh && exit 0
   fi
 
 elif [ $type -eq 11 ]; then
@@ -110,8 +115,13 @@ elif [ $type -eq 20 ]; then
     $scriptdir/sync-down.sh && exit 0
   fi
 
+elif [ $type -eq 201 ]; then
+  if Verify "Create backup file on local"; then
+    $scriptdir/backup-local.sh && exit 0
+  fi
+
 elif [ $type -eq 202 ]; then
-  if Verify "Restore database from local to local"; then
+  if Verify "Restore database on local"; then
     $scriptdir/restore-local.sh && exit 0
   fi
 
