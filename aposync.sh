@@ -32,7 +32,7 @@ else
   echo -e "   [${Underline_On}1${Styling_Off}] Sync up database && files"
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
   # echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server (TODO)"
-  # echo -e "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server (TODO)"
+  echo -e "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server"
   # echo -e "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server (TODO)"
   echo -e "       ↳ [${Underline_On}11${Styling_Off}] Sync up files"
   echo -e "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview"
@@ -78,6 +78,11 @@ if [ $type -eq 1 ]; then
 elif [ $type -eq 10 ]; then
   if Verify "Sync up database"; then
     $scriptdir/sync-up.sh && exit 0
+  fi
+
+elif [ $type -eq 102 ]; then
+  if Verify "Restore from file on server"; then
+    $scriptdir/restore-local.sh && exit 0
   fi
 
 elif [ $type -eq 11 ]; then
