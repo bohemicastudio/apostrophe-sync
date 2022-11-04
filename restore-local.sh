@@ -44,7 +44,7 @@ len=${#array[@]}
 echo -e "${UWhite}Date       Time     | ID | Database             (user)${Color_Off}"
 for (( j=0; j<"$len"; j++ ))
 do
-  echo ${array[$j]}_$j | awk -F'_' '{ printf "%s %s |%4d| %20s (%s)\n", $2,$3,$5,$1,$4 }' | sed 's/.mongodump//g' | sed 's/.bak//g'
+  echo ${array[$j]}_$j | awk -F'_' '{ sub("-", ":", $3); sub("-", ":", $3); printf "%s %s |%4d| %20s (%s)\n", $2,$3,$5,$1,$4 }' | sed 's/.mongodump//g' | sed 's/.bak//g'
 done
 
 selected=""
@@ -80,7 +80,7 @@ mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
 
 
 # Apply changes
-echoTitle "Apply remote data to local" &&
+echoTitle "Apply archived data to local" &&
 ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*" &&
 echoCmd "mongorestore --noIndexRestore --drop ${ns} --archive=$selected" &&
 
