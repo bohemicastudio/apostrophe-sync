@@ -57,7 +57,7 @@ Verify () {
   echoTitle "$1"
 
   if [ $gopass == 0 ]; then
-    echoCmd "Run the command? [Yes/No]"
+    echoCmd "Run the command? ${Styling_Off}[${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
     read go
   fi
 
