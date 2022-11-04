@@ -19,16 +19,6 @@ fi
 source $scriptdir/.env
 
 
-## Verify available SSH key
-key=""
-if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
-  key=""
-  Alert "Private SSH key is not set"
-else
-  key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
-fi
-
-
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
 local_filename="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
@@ -41,10 +31,6 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   local_file=".$local_file"
   local_backup=".$local_backup"
 fi
-
-server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
-server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
 
 
 ## Run the script
