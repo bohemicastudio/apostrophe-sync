@@ -4,9 +4,6 @@
 scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
-Color_Off='\033[0m'
-UWhite='\033[4;37m'
-
 
 ## Local .env resources
 if [ ! -f "$scriptdir/.env" ]; then
