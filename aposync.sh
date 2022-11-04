@@ -33,7 +33,7 @@ else
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
   echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server"
   echo -e "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server"
-  # echo -e "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server (TODO)"
+  echo -e "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server"
   echo -e "       ↳ [${Underline_On}11${Styling_Off}] Sync up files"
   echo -e "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview"
   echo -e "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete"
@@ -43,7 +43,7 @@ else
   echo -e "       ↳ [${Underline_On}20${Styling_Off}] Sync down database"
   echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local"
   echo -e "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local"
-  # echo -e "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local (TODO)"
+  echo -e "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local"
   echo -e "       ↳ [${Underline_On}21${Styling_Off}] Sync down files"
   echo -e "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview"
 
@@ -90,6 +90,11 @@ elif [ $type -eq 102 ]; then
     $scriptdir/restore-server.sh && exit 0
   fi
 
+elif [ $type -eq 103 ]; then
+  if Verify "List all backup files on server"; then
+    $scriptdir/list-server.sh && exit 0
+  fi
+
 elif [ $type -eq 11 ]; then
   if Verify "Sync up files"; then
     $scriptdir/files-up.sh && exit 0
@@ -123,6 +128,11 @@ elif [ $type -eq 201 ]; then
 elif [ $type -eq 202 ]; then
   if Verify "Restore database on local"; then
     $scriptdir/restore-local.sh && exit 0
+  fi
+
+elif [ $type -eq 203 ]; then
+  if Verify "List all backup files on local"; then
+    $scriptdir/list-local.sh && exit 0
   fi
 
 elif [ $type -eq 21 ]; then
