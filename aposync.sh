@@ -107,7 +107,7 @@ elif [ $type -eq 20 ]; then
 
 elif [ $type -eq 202 ]; then
   if Verify "Restore database from local to local"; then
-    $scriptdir/sync-restore.sh && exit 0
+    $scriptdir/restore-local.sh && exit 0
   fi
 
 elif [ $type -eq 21 ]; then

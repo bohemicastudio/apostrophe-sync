@@ -32,12 +32,9 @@ fi
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
 local_filename="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
-server_filename="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
 
-local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$local_filename
+local_file="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}"
 local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
-server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$server_filename
-server_backup="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${server_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -51,8 +48,6 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_D
 
 
 ## Run the script
-
-# Ask for local or server files
 
 # List all available snapshots in some pretty format
 available=$(ls $LOCAL_MONGO_BACKUPS_FOLDER_PATH)
