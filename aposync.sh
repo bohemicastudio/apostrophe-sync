@@ -28,7 +28,7 @@ elif [ $# -eq 1 ]; then
   type="$1"
 
 else
-  echo -e "${Bold_On}:: Upload actions (server ↑):${Styling_Off}"
+  echo -e "${Bold_On}:: Upload actions (to ${Italics_On}server${Styling_Off} ↑):${Styling_Off}"
   echo -e "   [${Underline_On}1${Styling_Off}] Sync up database && files"
   echo -e "       ↳ [${Underline_On}10${Styling_Off}] Sync up database"
   echo -e "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server"
@@ -38,7 +38,7 @@ else
   echo -e "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview"
   echo -e "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete"
   echo -e ""
-  echo -e "${Bold_On}:: Download actions (local ↓):${Styling_Off}"
+  echo -e "${Bold_On}:: Download actions (to ${Italics_On}local${Styling_Off} ↓):${Styling_Off}"
   echo -e "   [${Underline_On}2${Styling_Off}] Sync down database && files"
   echo -e "       ↳ [${Underline_On}20${Styling_Off}] Sync down database"
   echo -e "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local"
