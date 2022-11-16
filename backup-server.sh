@@ -39,8 +39,8 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
 fi
 
 server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
-server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
+remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $key"
+server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:$SERVER_MONGO_PORT/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
 
 
 ## Run the script
