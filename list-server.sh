@@ -37,7 +37,7 @@ remote_ssh="-p $SERVER_SSH_PORT $server_ssh $key"
 ## Run the script
 
 # List all available snapshots in some pretty format
-available=$(ssh $remote_ssh "ls $SERVER_MONGO_BAKUPS_FOLDER_PATH")
+available=$(ssh $remote_ssh "ls $SERVER_MONGO_BACKUPS_FOLDER_PATH")
 
 array=($available)
 len=${#array[@]}

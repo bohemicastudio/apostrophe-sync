@@ -28,12 +28,12 @@ fi
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-filename="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
-backup="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump.bak"
+filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
+backup="${SERVER_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump.bak"
 
 local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
-server_file=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$filename
-server_bak=$SERVER_MONGO_BAKUPS_FOLDER_PATH/$backup
+server_file=$SERVER_MONGO_BACKUPS_FOLDER_PATH/$filename
+server_bak=$SERVER_MONGO_BACKUPS_FOLDER_PATH/$backup
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -69,9 +69,9 @@ rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $local_file $server_ssh:$server_file
 
 # Backup remote copy
 echoTitle "Backup remote copy" &&
-echoCmd "ssh $remote_ssh \"mongodump --archive --uri=$server_uri >> $serve_bak\"" &&
+echoCmd "ssh $remote_ssh \"mongodump --archive --uri=$server_uri >> $server_bak\"" &&
 
-ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $serve_bak" &&
+ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $server_bak" &&
 
 
 # Apply local data to remote

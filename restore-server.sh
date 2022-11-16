@@ -31,10 +31,10 @@ fi
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-server_filename="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
+server_filename="${SERVER_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
 
-server_file="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${server_filename}"
-server_backup="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${server_filename}.bak"
+server_file="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${server_filename}"
+server_backup="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${server_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -50,7 +50,7 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:27017/$SERVER_D
 ## Run the script
 
 # List all available snapshots in some pretty format
-available=$(ssh $remote_ssh "ls $SERVER_MONGO_BAKUPS_FOLDER_PATH")
+available=$(ssh $remote_ssh "ls $SERVER_MONGO_BACKUPS_FOLDER_PATH")
 
 array=($available)
 len=${#array[@]}
@@ -72,7 +72,7 @@ do
 done
 
 echo ":: ${selected}"
-selected="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${selected}"
+selected="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
 read affi

@@ -18,7 +18,7 @@ source $scriptdir/.env
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-local_filename="${LOCAL_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
+local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
 
 local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 

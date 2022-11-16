@@ -28,9 +28,9 @@ fi
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-server_filename="${SERVER_DB_NAME}_${stamp}_${YOUR_PERSONAL_TAGNAME}.mongodump"
+server_filename="${SERVER_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
 
-server_backup="${SERVER_MONGO_BAKUPS_FOLDER_PATH}/${server_filename}.bak"
+server_backup="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${server_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
