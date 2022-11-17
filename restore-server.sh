@@ -34,7 +34,7 @@ available=$(ssh $remote_ssh "ls $SERVER_MONGO_BACKUPS_FOLDER_PATH")
 array=($available)
 len=${#array[@]}
 
-echo -e "${Underline_White}Date       Time     | ID | Database             (user)${Styling_Off}"
+printf "${Underline_White}Date       Time     | ID | Database             (user)${Styling_Off}\n"
 for (( j=0; j<"$len"; j++ ))
 do
   echo ${array[$j]}_$j | awk -F'_' '{ sub("-", ":", $3); sub("-", ":", $3); printf "%s %s |%4d| %20s (%s)\n", $2,$3,$5,$1,$4 }' | sed 's/.mongodump//g' | sed 's/.bak//g'

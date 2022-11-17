@@ -11,21 +11,22 @@ Underline_White='\033[4;37m'
 Yellow_On='\033[43m'
 Blue_On='\033[44m'
 
+
 # "UI"
 echoTitle () {
-  echo -e "${Blue_On}:: ${1} ${Styling_Off}"
+  printf "${Blue_On}:: ${1} ${Styling_Off}\n"
 }
 
 echoAlert () {
-  echo -e "${Yellow_On}:: ${1} ${Styling_Off}"
+  printf "${Yellow_On}:: ${1} ${Styling_Off}\n"
 }
 
 echoCmd () {
-  echo -e "${Blue_On}::${Styling_Off} ${1}"
+  printf "${Blue_On}::${Styling_Off} ${1}\n"
 }
 
 echoText () {
-  echo -e ":: ${1}"
+  printf ":: ${1}\n"
 }
 
 
