@@ -4,26 +4,8 @@
 scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
-
-## Local .env resources
-if [ ! -f "$scriptdir/.env" ]; then
-  Alert ".env file not found"
-  exit 1
-else
-  echo -e ":: .env file found"
-fi
-
-source $scriptdir/.env
-
-
-## Verify available SSH key
-key=""
-if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
-  key=""
-  Alert "Private SSH key is not set"
-else
-  key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
-fi
+# Verify available SSH key
+SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
@@ -42,7 +24,7 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
 fi
 
 server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $key"
+remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $SSH_KEY"
 server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
 
 
@@ -58,9 +40,9 @@ ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NA
 
 # Download archive
 echoTitle "Download archive" &&
-echoCmd "rsync -av -e \"ssh -p $SERVER_SSH_PORT $key\" $server_ssh:$server_file $local_file" &&
+echoCmd "rsync -av -e \"ssh -p $SERVER_SSH_PORT $SSH_KEY\" $server_ssh:$server_file $local_file" &&
 
-rsync -av -e "ssh -p $SERVER_SSH_PORT $key" $server_ssh:$server_file $local_file &&
+rsync -av -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $server_ssh:$server_file $local_file &&
 
 
 # Remove remote archive

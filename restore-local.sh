@@ -5,17 +5,6 @@ scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
 
-## Local .env resources
-if [ ! -f "$scriptdir/.env" ]; then
-  Alert ".env file not found"
-  exit 1
-else
-  echo -e ":: .env file found"
-fi
-
-source $scriptdir/.env
-
-
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
 local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
