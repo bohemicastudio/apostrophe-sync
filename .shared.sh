@@ -41,9 +41,9 @@ else
 fi
 
 source $SCRIPT_DIR/.env
-
+echo "external $EXTERNAL"
 # This project is an submodule of apostrophe project, get .env from parent git project
-if [ $EXTERNAL ]; then
+if [ $EXTERNAL == "true" ]; then
   echoText "sourcing .env params from parent Git module"
   source $SCRIPT_DIR/../../.env
 fi
