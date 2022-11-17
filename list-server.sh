@@ -4,9 +4,6 @@
 scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
-Color_Off='\033[0m'
-UWhite='\033[4;37m'
-
 
 ## Local .env resources
 if [ ! -f "$scriptdir/.env" ]; then
@@ -42,7 +39,7 @@ available=$(ssh $remote_ssh "ls $SERVER_MONGO_BACKUPS_FOLDER_PATH")
 array=($available)
 len=${#array[@]}
 
-echo -e "${UWhite}Date       Time     | Database                 (user)${Color_Off}"
+echo -e "${Underline_White}Date       Time     | Database                 (user)${Styling_Off}"
 for (( j=0; j<"$len"; j++ ))
 do
   echo ${array[$j]}_$j | awk -F'_' '{ sub("-", ":", $3); sub("-", ":", $3); printf "%s %s | %24s (%s)\n", $2,$3,$1,$4 }' | sed 's/.mongodump//g' | sed 's/.bak//g'
