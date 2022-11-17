@@ -28,6 +28,7 @@ local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  LOCAL_MONGO_BACKUPS_FOLDER_PATH=".$LOCAL_MONGO_BACKUPS_FOLDER_PATH"
   local_file=".$local_file"
   local_backup=".$local_backup"
 fi

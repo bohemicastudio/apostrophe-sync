@@ -19,12 +19,14 @@ fi
 source $scriptdir/.env
 
 
-## Run the script
-
+## Setup core variables
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   LOCAL_MONGO_BACKUPS_FOLDER_PATH=".$LOCAL_MONGO_BACKUPS_FOLDER_PATH"
 fi
+
+
+## Run the script
 
 # List all available snapshots in some pretty format
 available=$(ls $LOCAL_MONGO_BACKUPS_FOLDER_PATH)
