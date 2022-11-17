@@ -42,6 +42,12 @@ fi
 
 source $SCRIPT_DIR/.env
 
+# This project is an submodule of apostrophe project, get .env from parent git project
+if [ $EXTERNAL ]; then
+  echoText "sourcing .env params from parent Git module"
+  source $SCRIPT_DIR/../../.env
+fi
+
 
 verifySSH () {
   key=""
