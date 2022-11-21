@@ -4,26 +4,8 @@
 scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
-
-## Local .env resources
-if [ ! -f "$scriptdir/.env" ]; then
-  Alert ".env file not found"
-  exit 1
-else
-  echo -e ":: .env file found"
-fi
-
-source $scriptdir/.env
-
-
 ## Verify available SSH key
-key=""
-if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
-  key=""
-  Alert "Private SSH key is not set"
-else
-  key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
-fi
+SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
@@ -56,12 +38,12 @@ fi
 ## Run the script
 
 # Sync script
-# private key - ideally use a config file: https://unix.stackexchange.com/a/127355
+# private SSH_KEY - ideally use a config file: https://unix.stackexchange.com/a/127355
 echoTitle "Synchronize /uploads folders" &&
 echoCmd "From: $LOCAL_UPLOADS_FOLDER_PATH" &&
 echoCmd "To: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $key" $LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
+rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
 
 echoTitle "DONE" &&
 exit 0

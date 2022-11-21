@@ -4,20 +4,6 @@
 scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
-Color_Off='\033[0m'
-UWhite='\033[4;37m'
-
-
-## Local .env resources
-if [ ! -f "$scriptdir/.env" ]; then
-  Alert ".env file not found"
-  exit 1
-else
-  echo -e ":: .env file found"
-fi
-
-source $scriptdir/.env
-
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
@@ -28,6 +14,7 @@ local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  LOCAL_MONGO_BACKUPS_FOLDER_PATH=".$LOCAL_MONGO_BACKUPS_FOLDER_PATH"
   local_file=".$local_file"
   local_backup=".$local_backup"
 fi
@@ -41,7 +28,7 @@ available=$(ls $LOCAL_MONGO_BACKUPS_FOLDER_PATH)
 array=($available)
 len=${#array[@]}
 
-echo -e "${UWhite}Date       Time     | ID | Database             (user)${Color_Off}"
+printf "${Underline_White}Date       Time     | ID | Database             (user)${Styling_Off}\n"
 for (( j=0; j<"$len"; j++ ))
 do
   echo ${array[$j]}_$j | awk -F'_' '{ sub("-", ":", $3); sub("-", ":", $3); printf "%s %s |%4d| %20s (%s)\n", $2,$3,$5,$1,$4 }' | sed 's/.mongodump//g' | sed 's/.bak//g'
