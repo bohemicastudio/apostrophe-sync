@@ -41,7 +41,7 @@ else
 fi
 
 source $SCRIPT_DIR/.env
-echo "external $EXTERNAL"
+echoText "EXTERNAL=$EXTERNAL"
 # This project is an submodule of apostrophe project, get the .env file from parent git project
 if [ $EXTERNAL == "true" ]; then
   echoText "sourcing .env params from parent Git module"
