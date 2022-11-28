@@ -29,7 +29,7 @@ server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:$SERVER_MONGO_P
 
 # Create server backup
 echoTitle "Backup server database" &&
-up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
+# up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
 echoCmd "mongodump ${up} --authenticationDatabase admin --archive --uri=$server_uri >> $server_backup" &&
 
 ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --archive --uri=$server_uri >> $server_backup" &&

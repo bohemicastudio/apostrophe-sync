@@ -51,9 +51,9 @@ rsync -av -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $local_file $server_ssh:$server_
 
 # Backup remote copy
 echoTitle "Backup remote copy" &&
-echoCmd "ssh $remote_ssh \"mongodump --archive --uri=$server_uri >> $server_bak\"" &&
+echoCmd "ssh $remote_ssh \"mongodump --authenticationDatabase admin --archive --uri=$server_uri >> $server_bak\"" &&
 
-ssh $remote_ssh "mongodump --archive --uri=$server_uri >> $server_bak" &&
+ssh $remote_ssh "mongodump --authenticationDatabase admin --archive --uri=$server_uri >> $server_bak" &&
 
 
 # Apply local data to remote

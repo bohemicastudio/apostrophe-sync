@@ -25,17 +25,17 @@ fi
 
 server_ssh="$SERVER_USER@$SERVER_IP"
 remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $SSH_KEY"
-server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_DB_NAME:27017/$server?$SERVER_DB_EXTRA"
+server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:$SERVER_MONGO_PORT/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
 
 
 ## Run the script
 
 # Create remote archive
-echoTitle "Create local archive" &&
-up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
-echoCmd "ssh $remote_ssh \"mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file\"" &&
+echoTitle "Create remote archive" &&
+# up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
+echoCmd "ssh $remote_ssh \"mongodump ${up} --authenticationDatabase admin --uri=$server_uri --archive >> $server_file\"" &&
 
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin -d $SERVER_DB_NAME --archive >> $server_file" &&
+ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --uri=$server_uri --archive >> $server_file" &&
 
 
 # Download archive
