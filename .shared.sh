@@ -41,12 +41,16 @@ else
 fi
 
 source $SCRIPT_DIR/.env
-echo "external $EXTERNAL"
 # This project is an submodule of apostrophe project, get .env from parent git project
 if [ $EXTERNAL == "true" ]; then
   echoText "sourcing .env params from parent Git module"
   source $SCRIPT_DIR/../../.env
 fi
+
+
+# Create local mondodumps folder, when it does not exist
+# echo ":: mkdir -p $LOCAL_MONGO_BACKUPS_FOLDER_PATH"
+mkdir -p $LOCAL_MONGO_BACKUPS_FOLDER_PATH
 
 
 verifySSH () {
@@ -57,5 +61,11 @@ verifySSH () {
   else
     key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
   fi
+
+  # Create server mondodumps folder, when it does not exist
+  server_ssh="$SERVER_USER@$SERVER_IP"
+  remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $key"
+  ssh $remote_ssh "mkdir -p $SERVER_MONGO_BACKUPS_FOLDER_PATH"
+
   echo $key
 }
