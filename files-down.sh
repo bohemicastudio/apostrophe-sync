@@ -31,7 +31,7 @@ echoTitle "Synchronize /uploads folders" &&
 echoCmd "From: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
 echoCmd "To: $LOCAL_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $SSH_KEY\" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $LOCAL_UPLOADS_FOLDER_PATH &&
+rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $LOCAL_UPLOADS_FOLDER_PATH &&
 
 echoTitle "DONE" &&
 exit 0
