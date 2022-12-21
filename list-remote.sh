@@ -9,14 +9,14 @@ SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
-server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-p $SERVER_SSH_PORT $server_ssh $SSH_KEY"
+remote_ssh="$REMOTE_USER@$REMOTE_IP"
+remote_ssh="-p $REMOTE_SSH_PORT $remote_ssh $SSH_KEY"
 
 
 ## Run the script
 
 # List all available snapshots in some pretty format
-available=$(ssh $remote_ssh "ls -lh $SERVER_MONGO_BACKUPS_FOLDER_PATH")
+available=$(ssh $remote_ssh "ls -lh $REMOTE_MONGO_BACKUPS_FOLDER_PATH")
 
 IFS=$'\n'
 array=($available)

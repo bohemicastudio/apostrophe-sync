@@ -9,7 +9,7 @@ SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
-server_ssh="$SERVER_USER@$SERVER_IP"
+remote_ssh="$REMOTE_USER@$REMOTE_IP"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -25,7 +25,7 @@ fi
 
 force=""
 if [ "$1" == "-f" ] || [ "$1" == "--force" ] || [ "$2" == "-f" ] || [ "$2" == "--force" ]; then
-  printf "${Yellow_On}:: Do you really wish to remove files on the server, to match your directory precisely??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
+  printf "${Yellow_On}:: Do you really wish to remove files on the remote, to match your directory precisely??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
   read affi
   if [ "$affi" == "YES" ] || [ "$affi" == "yes" ] || [ "$affi" == "y" ]; then
     force="--delete"
@@ -41,9 +41,9 @@ fi
 # private SSH_KEY - ideally use a config file: https://unix.stackexchange.com/a/127355
 echoTitle "Synchronize /uploads folders" &&
 echoCmd "From: $LOCAL_UPLOADS_FOLDER_PATH" &&
-echoCmd "To: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
+echoCmd "To: $remote_ssh:$REMOTE_SSH_PORT $REMOTE_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry $force -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $LOCAL_UPLOADS_FOLDER_PATH/ $server_ssh:$SERVER_UPLOADS_FOLDER_PATH &&
+rsync -av $dry $force -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $LOCAL_UPLOADS_FOLDER_PATH/ $remote_ssh:$REMOTE_UPLOADS_FOLDER_PATH &&
 
 echoTitle "DONE" &&
 exit 0

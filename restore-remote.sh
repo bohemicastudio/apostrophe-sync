@@ -10,10 +10,10 @@ SSH_KEY="$(verifySSH)"
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-server_filename="${SERVER_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
+remote_filename="${REMOTE_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
 
-server_file="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${server_filename}"
-server_backup="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${server_filename}.bak"
+remote_file="${REMOTE_MONGO_BACKUPS_FOLDER_PATH}/${remote_filename}"
+remote_backup="${REMOTE_MONGO_BACKUPS_FOLDER_PATH}/${remote_filename}.bak"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -21,15 +21,15 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   local_backup=".$local_backup"
 fi
 
-server_ssh="$SERVER_USER@$SERVER_IP"
-remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $SSH_KEY"
-server_uri="mongodb://$SERVER_DB_USER:$SERVER_DB_PASS@$SERVER_IP:$SERVER_MONGO_PORT/$SERVER_DB_NAME?$SERVER_DB_EXTRA"
+remote_ssh="$REMOTE_USER@$REMOTE_IP"
+remote_ssh="-t -p $REMOTE_SSH_PORT $remote_ssh $SSH_KEY"
+remote_uri="mongodb://$REMOTE_DB_USER:$REMOTE_DB_PASS@$REMOTE_IP:$REMOTE_MONGO_PORT/$REMOTE_DB_NAME?$REMOTE_DB_EXTRA"
 
 
 ## Run the script
 
 # List all available snapshots in some pretty format
-available=$(ssh $remote_ssh "ls $SERVER_MONGO_BACKUPS_FOLDER_PATH")
+available=$(ssh $remote_ssh "ls $REMOTE_MONGO_BACKUPS_FOLDER_PATH")
 
 IFS=$'\n'
 array=($available)
@@ -59,7 +59,7 @@ do
 done
 
 echo ":: ${selected}"
-selected="${SERVER_MONGO_BACKUPS_FOLDER_PATH}/${selected}"
+selected="${REMOTE_MONGO_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
 read affi
@@ -73,17 +73,17 @@ else
 fi
 
 
-# Create server backup
-echoTitle "Backup server database" &&
-up="--username=$SERVER_DB_USER --password=$SERVER_DB_PASS" &&
-echoCmd "mongodump ${up} --authenticationDatabase admin --archive --uri=$server_uri >> $server_backup" &&
+# Create remote backup
+echoTitle "Backup remote database" &&
+up="--username=$REMOTE_DB_USER --password=$REMOTE_DB_PASS" &&
+echoCmd "mongodump ${up} --authenticationDatabase admin --archive --uri=$remote_uri >> $remote_backup" &&
 
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --archive --uri=$server_uri >> $server_backup" &&
+ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --archive --uri=$remote_uri >> $remote_backup" &&
 
 
 # Apply changes
-echoTitle "Apply archived data to server" &&
-ns="--nsInclude=$SERVER_DB_NAME.* --nsFrom=$SERVER_DB_NAME.* --nsTo=$SERVER_DB_NAME.*" &&
+echoTitle "Apply archived data to remote" &&
+ns="--nsInclude=$REMOTE_DB_NAME.* --nsFrom=$REMOTE_DB_NAME.* --nsTo=$REMOTE_DB_NAME.*" &&
 echoCmd "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$selected" &&
 
 ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$selected" &&

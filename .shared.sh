@@ -55,17 +55,17 @@ mkdir -p $LOCAL_MONGO_BACKUPS_FOLDER_PATH
 
 verifySSH () {
   key=""
-  if [ -z "$SERVER_SSH_PRIVATE_KEY_PATH" ]; then
+  if [ -z "$REMOTE_SSH_PRIVATE_KEY_PATH" ]; then
     echoAlert "Private SSH key is not set"
     exit 2
   else
-    key="-i $SERVER_SSH_PRIVATE_KEY_PATH"
+    key="-i $REMOTE_SSH_PRIVATE_KEY_PATH"
   fi
 
-  # Create server mondodumps folder, when it does not exist
-  server_ssh="$SERVER_USER@$SERVER_IP"
-  remote_ssh="-t -p $SERVER_SSH_PORT $server_ssh $key"
-  ssh $remote_ssh "mkdir -p $SERVER_MONGO_BACKUPS_FOLDER_PATH"
+  # Create remote mondodumps folder, when it does not exist
+  remote_ssh="$REMOTE_USER@$REMOTE_IP"
+  remote_ssh="-t -p $REMOTE_SSH_PORT $remote_ssh $key"
+  ssh $remote_ssh "mkdir -p $REMOTE_MONGO_BACKUPS_FOLDER_PATH"
 
   echo $key
 }

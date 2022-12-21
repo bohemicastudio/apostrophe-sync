@@ -9,7 +9,7 @@ SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
-server_ssh="$SERVER_USER@$SERVER_IP"
+remote_ssh="$REMOTE_USER@$REMOTE_IP"
 
 if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
@@ -28,10 +28,10 @@ fi
 
 # Sync script
 echoTitle "Synchronize /uploads folders" &&
-echoCmd "From: $server_ssh:$SERVER_SSH_PORT $SERVER_UPLOADS_FOLDER_PATH" &&
+echoCmd "From: $remote_ssh:$REMOTE_SSH_PORT $REMOTE_UPLOADS_FOLDER_PATH" &&
 echoCmd "To: $LOCAL_UPLOADS_FOLDER_PATH" &&
 
-rsync -av $dry -e "ssh -p $SERVER_SSH_PORT $SSH_KEY" $server_ssh:$SERVER_UPLOADS_FOLDER_PATH/ $LOCAL_UPLOADS_FOLDER_PATH &&
+rsync -av $dry -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $remote_ssh:$REMOTE_UPLOADS_FOLDER_PATH/ $LOCAL_UPLOADS_FOLDER_PATH &&
 
 echoTitle "DONE" &&
 exit 0

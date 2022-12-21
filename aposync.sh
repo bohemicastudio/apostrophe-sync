@@ -28,17 +28,17 @@ elif [ $# -eq 1 ]; then
   type="$1"
 
 else
-  printf "${Bold_On}:: Upload actions (local → ${Italics_On}server${Styling_Off}):${Styling_Off}\n"
+  printf "${Bold_On}:: Upload actions (local → ${Italics_On}remote${Styling_Off}):${Styling_Off}\n"
   printf "   [${Underline_On}1${Styling_Off}] Sync up database && files\n"
   printf "       ↳ [${Underline_On}10${Styling_Off}] Sync up database\n"
-  printf "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server\n"
-  printf "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on server\n"
-  printf "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on server\n"
+  printf "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on remote\n"
+  printf "              ↳ [${Underline_On}102${Styling_Off}] Restore from file on remote\n"
+  printf "              ↳ [${Underline_On}103${Styling_Off}] List all backup files on remote\n"
   printf "       ↳ [${Underline_On}11${Styling_Off}] Sync up files\n"
   printf "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview\n"
   printf "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete\n"
   printf "\n"
-  printf "${Bold_On}:: Download actions (server → ${Italics_On}local${Styling_Off}):${Styling_Off}\n"
+  printf "${Bold_On}:: Download actions (remote → ${Italics_On}local${Styling_Off}):${Styling_Off}\n"
   printf "   [${Underline_On}2${Styling_Off}] Sync down database && files\n"
   printf "       ↳ [${Underline_On}20${Styling_Off}] Sync down database\n"
   printf "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local\n"
@@ -81,18 +81,18 @@ elif [ $type -eq 10 ]; then
   fi
 
 elif [ $type -eq 101 ]; then
-  if Verify "Create backup file on server"; then
-    $scriptdir/backup-server.sh && exit 0
+  if Verify "Create backup file on remote"; then
+    $scriptdir/backup-remote.sh && exit 0
   fi
 
 elif [ $type -eq 102 ]; then
-  if Verify "Restore from file on server"; then
-    $scriptdir/restore-server.sh && exit 0
+  if Verify "Restore from file on remote"; then
+    $scriptdir/restore-remote.sh && exit 0
   fi
 
 elif [ $type -eq 103 ]; then
-  if Verify "List all backup files on server"; then
-    $scriptdir/list-server.sh && exit 0
+  if Verify "List all backup files on remote"; then
+    $scriptdir/list-remote.sh && exit 0
   fi
 
 elif [ $type -eq 11 ]; then
