@@ -1,6 +1,6 @@
 # Apostrophe Sync
 
-### An easy-to-use ApostropheCMS companion script for syncing a MongoDB database collections and `/uploads` folder contents between local and remote environments.
+### An ApostropheCMS companion script for syncing MongoDB database collections and `/uploads` folder contents between local and remote environments.
 
 ## Prerequisites:
 - `bash`
