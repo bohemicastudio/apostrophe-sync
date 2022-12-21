@@ -28,7 +28,7 @@ elif [ $# -eq 1 ]; then
   type="$1"
 
 else
-  printf "${Bold_On}:: Upload actions (to ${Italics_On}server${Styling_Off} ↑):${Styling_Off}\n"
+  printf "${Bold_On}:: Upload actions (local → ${Italics_On}server${Styling_Off}):${Styling_Off}\n"
   printf "   [${Underline_On}1${Styling_Off}] Sync up database && files\n"
   printf "       ↳ [${Underline_On}10${Styling_Off}] Sync up database\n"
   printf "              ↳ [${Underline_On}101${Styling_Off}] Create backup file on server\n"
@@ -38,7 +38,7 @@ else
   printf "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview\n"
   printf "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete\n"
   printf "\n"
-  printf "${Bold_On}:: Download actions (to ${Italics_On}local${Styling_Off} ↓):${Styling_Off}\n"
+  printf "${Bold_On}:: Download actions (server → ${Italics_On}local${Styling_Off}):${Styling_Off}\n"
   printf "   [${Underline_On}2${Styling_Off}] Sync down database && files\n"
   printf "       ↳ [${Underline_On}20${Styling_Off}] Sync down database\n"
   printf "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local\n"
@@ -72,12 +72,12 @@ Verify () {
 
 if [ $type -eq 1 ]; then
   if Verify "Sync up database && files"; then
-    $scriptdir/sync-up.sh && $scriptdir/files-up.sh && exit 0
+    $scriptdir/db-up.sh && $scriptdir/files-up.sh && exit 0
   fi
 
 elif [ $type -eq 10 ]; then
   if Verify "Sync up database"; then
-    $scriptdir/sync-up.sh && exit 0
+    $scriptdir/db-up.sh && exit 0
   fi
 
 elif [ $type -eq 101 ]; then
@@ -112,12 +112,12 @@ elif [ $type -eq 111 ]; then
 
 elif [ $type -eq 2 ]; then
   if Verify "Sync down database && files"; then
-    $scriptdir/sync-down.sh && $scriptdir/files-down.sh && exit 0
+    $scriptdir/db-down.sh && $scriptdir/files-down.sh && exit 0
   fi
 
 elif [ $type -eq 20 ]; then
   if Verify "Sync down database"; then
-    $scriptdir/sync-down.sh && exit 0
+    $scriptdir/db-down.sh && exit 0
   fi
 
 elif [ $type -eq 201 ]; then
