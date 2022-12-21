@@ -6,12 +6,12 @@
 - `bash`
 - `rsync`
 - `mongodump` & `mongorestore`- they can be installed as a part of the [MongoDB Database Tools](https://www.mongodb.com/docs/database-tools/installation/installation/)
-- correctly set `.env` variables to connect via the `ssh`
+- correctly set environmental variables inside the `aposync.config.js` in order to connect via SSH client
 
 ## How to use:
 
-1. Add the package via npm or yarn to your project: `npm install @bohemicastudio/aposync`
-2. Create `aposync.config.js` file in the root folder of your project with `aposync init` command and set the necessary variables.
+1. Add the package with `npm` or `yarn` to your project: `npm install @bohemicastudio/aposync`
+2. Run `aposync init` to create the configuration file `aposync.config.js` in the root folder of your project and set the necessary variables inside.
 3. Run `aposync` command in your terminal to access an action overview menu.
 4. Input the numeric code inside the square brackets to run the desired action.
    - If you remember the code number you can enter it with the command e.g. `aposync 101` or `aposync 101 -y` to skip the confirmation.
