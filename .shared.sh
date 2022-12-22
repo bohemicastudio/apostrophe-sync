@@ -63,8 +63,8 @@ verifySSH () {
   fi
 
   # Create remote mondodumps folder, when it does not exist
-  remote_ssh="$REMOTE_USER@$REMOTE_IP"
-  remote_ssh="-t -p $REMOTE_SSH_PORT $remote_ssh $key"
+  remote_address="$REMOTE_USER@$REMOTE_IP"
+  remote_ssh="-t -p $REMOTE_SSH_PORT $remote_address $key"
   ssh $remote_ssh "mkdir -p $REMOTE_MONGO_BACKUPS_FOLDER_PATH"
 
   echo $key

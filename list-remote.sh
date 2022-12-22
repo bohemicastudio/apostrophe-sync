@@ -9,8 +9,8 @@ SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
-remote_ssh="$REMOTE_USER@$REMOTE_IP"
-remote_ssh="-p $REMOTE_SSH_PORT $remote_ssh $SSH_KEY"
+remote_address="$REMOTE_USER@$REMOTE_IP"
+remote_ssh="-p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
 
 
 ## Run the script

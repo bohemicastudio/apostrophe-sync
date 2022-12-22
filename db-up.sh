@@ -22,8 +22,8 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   local_file=".$local_file"
 fi
 
-remote_ssh="$REMOTE_USER@$REMOTE_IP"
-remote_ssh="-t -p $REMOTE_SSH_PORT $remote_ssh $SSH_KEY"
+remote_address="$REMOTE_USER@$REMOTE_IP"
+remote_ssh="-t -p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
 remote_uri="mongodb://$REMOTE_DB_USER:$REMOTE_DB_PASS@$REMOTE_IP:$REMOTE_MONGO_PORT/$REMOTE_DB_NAME?$REMOTE_DB_EXTRA"
 
 
@@ -38,9 +38,9 @@ mongodump -d $LOCAL_DB_NAME --archive=$local_file &&
 
 # Transport archive
 echoTitle "Transport archive" &&
-echoCmd "rsync -av -e \"ssh -p $REMOTE_SSH_PORT $SSH_KEY\" $local_file $remote_ssh:$remote_file" &&
+echoCmd "rsync -av -e \"ssh -p $REMOTE_SSH_PORT $SSH_KEY\" $local_file $remote_address:$remote_file" &&
 
-rsync -av -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $local_file $remote_ssh:$remote_file &&
+rsync -av -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $local_file $remote_address:$remote_file &&
 
 
 # Remove the local archive

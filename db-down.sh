@@ -23,8 +23,8 @@ if [ $LOCAL_MAC_ADRESSES == "true" ]; then
   local_backup=".$local_backup"
 fi
 
-remote_ssh="$REMOTE_USER@$REMOTE_IP"
-remote_ssh="-t -p $REMOTE_SSH_PORT $remote_ssh $SSH_KEY"
+remote_address="$REMOTE_USER@$REMOTE_IP"
+remote_ssh="-t -p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
 remote_uri="mongodb://$REMOTE_DB_USER:$REMOTE_DB_PASS@$REMOTE_IP:$REMOTE_MONGO_PORT/$REMOTE_DB_NAME?$REMOTE_DB_EXTRA"
 
 
@@ -40,9 +40,9 @@ ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --uri=$remote_ur
 
 # Download archive
 echoTitle "Download archive" &&
-echoCmd "rsync -av -e \"ssh -p $REMOTE_SSH_PORT $SSH_KEY\" $remote_ssh:$remote_file $local_file" &&
+echoCmd "rsync -av -e \"ssh -p $REMOTE_SSH_PORT $SSH_KEY\" $remote_address:$remote_file $local_file" &&
 
-rsync -av -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $remote_ssh:$remote_file $local_file &&
+rsync -av -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $remote_address:$remote_file $local_file &&
 
 
 # Remove remote archive
