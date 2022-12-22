@@ -46,6 +46,7 @@ else
   printf "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local\n"
   printf "       ↳ [${Underline_On}21${Styling_Off}] Sync down files\n"
   printf "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview\n"
+  printf "Enter code: "
 
   read type
 fi

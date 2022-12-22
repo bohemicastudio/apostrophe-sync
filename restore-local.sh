@@ -42,6 +42,8 @@ do
 done
 
 selected=""
+
+printf "Enter file ID: "
 read index
 for (( j=0; j<"${#array[@]}"; j++ ))
 do
