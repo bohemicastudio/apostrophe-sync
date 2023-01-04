@@ -7,14 +7,14 @@ source $scriptdir/.shared.sh
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
+local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
 
-local_file="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}"
-local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
+local_file="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}"
+local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
-if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+if [ $MAC_PATHS == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
-  LOCAL_MONGO_BACKUPS_FOLDER_PATH=".$LOCAL_MONGO_BACKUPS_FOLDER_PATH"
+  LOCAL_BACKUPS_FOLDER_PATH=".$LOCAL_BACKUPS_FOLDER_PATH"
   local_file=".$local_file"
   local_backup=".$local_backup"
 fi
@@ -23,7 +23,7 @@ fi
 ## Run the script
 
 # List all available snapshots in some pretty format
-available=$(ls -lh $LOCAL_MONGO_BACKUPS_FOLDER_PATH)
+available=$(ls -lh $LOCAL_BACKUPS_FOLDER_PATH)
 
 IFS=$'\n'
 array=($available)
@@ -55,7 +55,7 @@ do
 done
 
 echo ":: ${selected}"
-selected="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${selected}"
+selected="${LOCAL_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
 read affi

@@ -10,21 +10,21 @@ SSH_KEY="$(verifySSH)"
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
-backup="${REMOTE_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump.bak"
+filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+backup="${REMOTE_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump.bak"
 
-local_file=$LOCAL_MONGO_BACKUPS_FOLDER_PATH/$filename
-remote_file=$REMOTE_MONGO_BACKUPS_FOLDER_PATH/$filename
-remote_bak=$REMOTE_MONGO_BACKUPS_FOLDER_PATH/$backup
+local_file=$LOCAL_BACKUPS_FOLDER_PATH/$filename
+remote_file=$REMOTE_BACKUPS_FOLDER_PATH/$filename
+remote_bak=$REMOTE_BACKUPS_FOLDER_PATH/$backup
 
-if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+if [ $MAC_PATHS == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_file=".$local_file"
 fi
 
-remote_address="$REMOTE_USER@$REMOTE_IP"
+remote_address="$REMOTE_SSH_USER@$REMOTE_SSH_IP"
 remote_ssh="-t -p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
-remote_uri="mongodb://$REMOTE_DB_USER:$REMOTE_DB_PASS@$REMOTE_IP:$REMOTE_MONGO_PORT/$REMOTE_DB_NAME?$REMOTE_DB_EXTRA"
+remote_uri="mongodb://$REMOTE_MONGO_DB_USER:$REMOTE_MONGO_DB_PASS@$REMOTE_SSH_IP:$REMOTE_MONGO_DB_PORT/$REMOTE_MONGO_DB_NAME?$REMOTE_MONGO_URI"
 
 
 ## Run the script
@@ -58,8 +58,8 @@ ssh $remote_ssh "mongodump --authenticationDatabase admin --archive --uri=$remot
 
 # Apply local data to remote
 echoTitle "Apply local data to remote" &&
-up="--username=$REMOTE_DB_USER --password=$REMOTE_DB_PASS" &&
-ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$REMOTE_DB_NAME.*" &&
+up="--username=$REMOTE_MONGO_DB_USER --password=$REMOTE_MONGO_DB_PASS" &&
+ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$REMOTE_MONGO_DB_NAME.*" &&
 echoCmd "ssh $remote_ssh \"mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$remote_file\"" &&
 
 ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$remote_file" &&

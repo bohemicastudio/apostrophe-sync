@@ -7,11 +7,11 @@ source $scriptdir/.shared.sh
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$YOUR_PERSONAL_TAGNAME" ] && echo "_$YOUR_PERSONAL_TAGNAME").mongodump"
+local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
 
-local_backup="${LOCAL_MONGO_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
+local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
-if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+if [ $MAC_PATHS == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_backup=".$local_backup"
 fi

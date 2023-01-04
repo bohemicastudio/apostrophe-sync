@@ -9,9 +9,9 @@ SSH_KEY="$(verifySSH)"
 
 
 ## Setup core variables
-remote_address="$REMOTE_USER@$REMOTE_IP"
+remote_address="$REMOTE_SSH_USER@$REMOTE_SSH_IP"
 
-if [ $LOCAL_MAC_ADRESSES == "true" ]; then
+if [ $MAC_PATHS == "true" ]; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   LOCAL_UPLOADS_FOLDER_PATH=".$LOCAL_UPLOADS_FOLDER_PATH"
 fi
