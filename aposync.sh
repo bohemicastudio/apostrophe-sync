@@ -1,7 +1,25 @@
 #!/bin/bash
 
-## Shared resources
+## `aposync init` functionality
 scriptdir="$(dirname "$0")"
+if [ $# -eq 1 ] && [ $1 == "init" ]; then
+  cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../aposync.config.json" &&
+  Styling_Off='\033[0m'
+  Blue_On='\033[44m'
+  printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
+  exit 0
+fi;
+
+if [ $# -eq 1 ] && [ $1 == "init-sa" ]; then
+  cp "$scriptdir/aposync.config.example.json" "$scriptdir/aposync.config.json" &&
+  Styling_Off='\033[0m'
+  Blue_On='\033[44m'
+  printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
+  exit 0
+fi;
+
+
+## Shared resources
 source $scriptdir/.shared.sh
 
 
