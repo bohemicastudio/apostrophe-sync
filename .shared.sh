@@ -30,7 +30,7 @@ echoText () {
 }
 
 
-# Get local settings file
+# Get stand-alone settings file
 SCRIPT_DIR="$(dirname "$0")"
 ENV_FILE="aposync.config.json"
 
@@ -42,9 +42,11 @@ if [ ! -f "$SCRIPT_DIR/../../$ENV_FILE" ]; then
     exit 1
   else
     echoText "Stand-alone config file found"
+    ENV_FILE="$SCRIPT_DIR/$ENV_FILE"
   fi
 else
   echoText "Root config file found"
+  ENV_FILE="$SCRIPT_DIR/../../$ENV_FILE"
 fi
 
 
