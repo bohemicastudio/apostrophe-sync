@@ -1,0 +1,22 @@
+{
+  "name": "@bohemicastudio/apostrophe-sync",
+  "version": "1.0.1",
+  "description": "An ApostropheCMS companion script for syncing MongoDB database collections and `/uploads` folder contents between local and remote environments.",
+  "main": "aposync.sh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bohemicastudio/apostrophe-sync.git"
+  },
+  "keywords": [
+    "apostrophecms"
+  ],
+  "author": "Bohemica Studio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bohemicastudio/apostrophe-sync/issues"
+  },
+  "homepage": "https://github.com/bohemicastudio/apostrophe-sync#readme",
+  "bin": {
+    "aposync": "bin/aposync/index.js"
+  }
+}
