@@ -14,7 +14,7 @@
 2. Run `aposync init` to create the configuration file `aposync.config.js` in the root folder of your project and set the necessary variables inside.
 3. Run `aposync` command in your terminal to access an action overview menu.
 4. Input the numeric code inside the square brackets to run the desired action.
-   - If you remember the code number you can enter it with the command e.g. `aposync 101` or `aposync 101 -y` to skip the confirmation.
+   - If you remember the code number you can enter it after the command e.g. `aposync 101` or `aposync 101 -y` to skip the confirmation.
 5. Now relax and let the script do the work for you.
 
 ## Configuration:
