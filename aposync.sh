@@ -18,6 +18,7 @@ if [ $# -eq 1 ] && [ $1 == "init-sa" ]; then
   exit 0
 fi;
 
+printf "scriptdir: ${scriptdir}"
 
 ## Shared resources
 source $scriptdir/.shared.sh

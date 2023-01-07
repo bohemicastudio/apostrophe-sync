@@ -34,7 +34,7 @@ echoText () {
 SCRIPT_DIR="$(dirname "$0")"
 ENV_FILE="aposync.config.json"
 
-if [ ! -f "$SCRIPT_DIR/../../$ENV_FILE" ]; then
+if [[ ! -f "$SCRIPT_DIR/../../$ENV_FILE" && ! -f "$SCRIPT_DIR/../../../$ENV_FILE" ]]; then
   # echoAlert "Root config file for apostrophe-sync not found!"
 
   if [ ! -f "$SCRIPT_DIR/$ENV_FILE" ]; then
@@ -46,7 +46,13 @@ if [ ! -f "$SCRIPT_DIR/../../$ENV_FILE" ]; then
   fi
 else
   echoText "Root config file found"
-  ENV_FILE="$SCRIPT_DIR/../../$ENV_FILE"
+  if [ -f "$SCRIPT_DIR/../../$ENV_FILE" ]; then
+    ENV_FILE="$SCRIPT_DIR/../../$ENV_FILE"
+    echoText $ENV_FILE
+  else
+    ENV_FILE="$SCRIPT_DIR/../../../$ENV_FILE"
+    echoText $ENV_FILE
+    fi
 fi
 
 
