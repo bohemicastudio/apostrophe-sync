@@ -7,7 +7,7 @@ source $scriptdir/.shared.sh
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+local_filename="${LOCAL_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
 
 local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
@@ -21,9 +21,9 @@ fi
 
 # Create local backup
 echoTitle "Backup local database" &&
-echoCmd "mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+echoCmd "mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_backup" &&
 
-mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
+mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_backup &&
 
 
 echoTitle "DONE"

@@ -10,7 +10,7 @@ SSH_KEY="$(verifySSH)"
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+filename="${LOCAL_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
 backup="${REMOTE_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump.bak"
 
 local_file=$LOCAL_BACKUPS_FOLDER_PATH/$filename
@@ -31,9 +31,9 @@ remote_uri="mongodb://$REMOTE_MONGO_DB_USER:$REMOTE_MONGO_DB_PASS@$REMOTE_SSH_IP
 
 # Create local archive
 echoTitle "Create local archive" &&
-echoCmd "mongodump -d $LOCAL_DB_NAME --archive=$local_file" &&
+echoCmd "mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_file" &&
 
-mongodump -d $LOCAL_DB_NAME --archive=$local_file &&
+mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_file &&
 
 
 # Transport archive
@@ -59,7 +59,7 @@ ssh $remote_ssh "mongodump --authenticationDatabase admin --archive --uri=$remot
 # Apply local data to remote
 echoTitle "Apply local data to remote" &&
 up="--username=$REMOTE_MONGO_DB_USER --password=$REMOTE_MONGO_DB_PASS" &&
-ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$REMOTE_MONGO_DB_NAME.*" &&
+ns="--nsInclude=$LOCAL_MONGO_DB_NAME.* --nsFrom=$LOCAL_MONGO_DB_NAME.* --nsTo=$REMOTE_MONGO_DB_NAME.*" &&
 echoCmd "ssh $remote_ssh \"mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$remote_file\"" &&
 
 ssh $remote_ssh "mongorestore ${up} ${ns} --noIndexRestore --drop --archive=$remote_file" &&

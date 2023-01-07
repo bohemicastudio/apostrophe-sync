@@ -36,7 +36,7 @@ ENV_FILE="aposync.config.json"
 
 if [ ! -f "$SCRIPT_DIR/../../$ENV_FILE" ]; then
   # echoAlert "Root config file for apostrophe-sync not found!"
-  
+
   if [ ! -f "$SCRIPT_DIR/$ENV_FILE" ]; then
     echoAlert "Root and stand-alone config file for apostrophe-sync not found!"
     exit 1
@@ -54,11 +54,12 @@ fi
 for s in $(jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
   export $s
 done
-unset $LOCAL
-unset $REMOTE
+unset LOCAL
+unset REMOTE
 
 for s in $(jq -r ".LOCAL|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
   export "LOCAL_$s"
+  # printf "Global variable: %s\n" "LOCAL_${s}"
 done
 
 for s in $(jq -r ".REMOTE|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do

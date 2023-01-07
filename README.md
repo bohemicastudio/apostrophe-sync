@@ -5,6 +5,7 @@
 ## Prerequisites:
 - `bash`
 - `rsync`
+- `jq`
 - `mongodump` & `mongorestore`- they can be installed as a part of the [MongoDB Database Tools](https://www.mongodb.com/docs/database-tools/installation/installation/)
 - correctly set environmental variables inside the `aposync.config.js` in order to connect via SSH client
 

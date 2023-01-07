@@ -7,7 +7,7 @@ source $scriptdir/.shared.sh
 
 ## Setup core variables
 stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-local_filename="${LOCAL_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+local_filename="${LOCAL_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
 
 local_file="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}"
 local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
@@ -71,14 +71,14 @@ fi
 
 # Create local backup
 echoTitle "Backup local database" &&
-echoCmd "mongodump -d $LOCAL_DB_NAME --archive=$local_backup" &&
+echoCmd "mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_backup" &&
 
-mongodump -d $LOCAL_DB_NAME --archive=$local_backup &&
+mongodump -d $LOCAL_MONGO_DB_NAME --archive=$local_backup &&
 
 
 # Apply changes
 echoTitle "Apply archived data to local" &&
-ns="--nsInclude=$LOCAL_DB_NAME.* --nsFrom=$LOCAL_DB_NAME.* --nsTo=$LOCAL_DB_NAME.*" &&
+ns="--nsInclude=$LOCAL_MONGO_DB_NAME.* --nsFrom=$LOCAL_MONGO_DB_NAME.* --nsTo=$LOCAL_MONGO_DB_NAME.*" &&
 echoCmd "mongorestore --noIndexRestore --drop ${ns} --archive=$selected" &&
 
 mongorestore --noIndexRestore --drop ${ns} --archive=$selected &&
