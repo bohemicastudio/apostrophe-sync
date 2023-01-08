@@ -2,23 +2,22 @@
 
 ## `aposync init` functionality
 scriptdir="$(dirname "$0")"
+# printf "scriptdir: ${scriptdir}\n"
+
 if [ $# -eq 1 ] && [ $1 == "init" ]; then
-  cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../aposync.config.json" &&
-  Styling_Off='\033[0m'
   Blue_On='\033[44m'
-  printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
-  exit 0
+  Styling_Off='\033[0m'
+
+  if [ -f "$scriptdir/../../../aposync.config.json" ]; then
+    printf "${Blue_On}:: Aposync config file already exists!${Styling_Off} \n"
+    exit 1
+  else
+    cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../../aposync.config.json" &&
+    printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
+    exit 0
+  fi;
 fi;
 
-if [ $# -eq 1 ] && [ $1 == "init-sa" ]; then
-  cp "$scriptdir/aposync.config.example.json" "$scriptdir/aposync.config.json" &&
-  Styling_Off='\033[0m'
-  Blue_On='\033[44m'
-  printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
-  exit 0
-fi;
-
-printf "scriptdir: ${scriptdir}"
 
 ## Shared resources
 source $scriptdir/.shared.sh
