@@ -2,19 +2,14 @@
 
 'use strict'
 
-const { exec } = require('child_process')
+const child_process = require('child_process')
 
-console.log(__dirname)
-console.log(process.cwd())
+// console.log(__dirname)
+// console.log(process.cwd())
 
-let arg = ''
+let arg = []
 if (process.argv.length > 2)
-	arg = ' ' + process.argv.slice(2).join(' ');
+	arg = process.argv.slice(2)
 
-exec('pwd')
-
-exec(`${process.cwd()}/node_modules/@bohemicastudio/apostrophe-sync/aposync.sh`+arg, function (error, stdout, stderr) {
-	console.error(error)
-	console.log(stdout)
-	console.log(stderr)
-})
+// child_process.exec('pwd')
+child_process.execFileSync(`${process.cwd()}/node_modules/@bohemicastudio/apostrophe-sync/aposync.sh`, arg, {stdio: 'inherit'})
