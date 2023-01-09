@@ -35,17 +35,15 @@ SCRIPT_DIR="$(dirname "$0")"
 ENV_FILE="aposync.config.json"
 
 if [ ! -f "$SCRIPT_DIR/../../../$ENV_FILE" ]; then
-  # echoAlert "Root config file for apostrophe-sync not found!"
-
   if [ ! -f "$SCRIPT_DIR/$ENV_FILE" ]; then
-    echoAlert "Root and stand-alone config file for apostrophe-sync not found!"
+    echoAlert "No config file found."
     exit 1
   else
-    echoText "Stand-alone config file found"
+    echoText "Config file found inside the package folder."
     ENV_FILE="$SCRIPT_DIR/$ENV_FILE"
   fi
 else
-  echoText "Root config file found"
+  echoText "Config file found inside the project folder."
   ENV_FILE="$SCRIPT_DIR/../../../$ENV_FILE"
 fi
 

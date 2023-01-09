@@ -2,17 +2,18 @@
 
 ## `aposync init` functionality
 scriptdir="$(dirname "$0")"
+ENV_FILE="aposync.config.json"
 # printf "scriptdir: ${scriptdir}\n"
 
 if [ $# -eq 1 ] && [ $1 == "init" ]; then
   Blue_On='\033[44m'
   Styling_Off='\033[0m'
 
-  if [ -f "$scriptdir/../../../aposync.config.json" ]; then
+  if [ -f "$scriptdir/../../../$ENV_FILE" ]; then
     printf "${Blue_On}:: Aposync config file already exists!${Styling_Off} \n"
     exit 1
   else
-    cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../../aposync.config.json" &&
+    cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../../$ENV_FILE" &&
     printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
     exit 0
   fi;
