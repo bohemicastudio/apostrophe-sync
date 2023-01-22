@@ -78,9 +78,9 @@ fi
 # Create remote backup
 echoTitle "Backup remote database" &&
 up="--username=$REMOTE_MONGO_DB_USER --password=$REMOTE_MONGO_DB_PASS" &&
-echoCmd "mongodump ${up} --authenticationDatabase admin --archive --uri=$remote_uri >> $remote_backup" &&
+echoCmd "mongodump ${up} --authenticationDatabase=admin --archive --uri='$remote_uri' >> $remote_backup" &&
 
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase admin --archive --uri=$remote_uri >> $remote_backup" &&
+ssh $remote_ssh "mongodump ${up} --authenticationDatabase=admin --archive --uri='$remote_uri' >> $remote_backup" &&
 
 
 # Apply changes
