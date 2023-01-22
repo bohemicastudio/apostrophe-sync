@@ -1,6 +1,6 @@
 {
   "name": "@bohemicastudio/apostrophe-sync",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "An ApostropheCMS companion script for syncing MongoDB database collections and `/uploads` folder contents between local and remote environments.",
   "main": "aposync.sh",
   "repository": {
