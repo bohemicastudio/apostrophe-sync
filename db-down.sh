@@ -33,9 +33,9 @@ remote_uri="mongodb://$REMOTE_MONGO_DB_USER:$REMOTE_MONGO_DB_PASS@$REMOTE_SSH_IP
 # Create remote archive
 echoTitle "Create remote archive" &&
 # up="--username=$REMOTE_MONGO_DB_USER --password=$REMOTE_MONGO_DB_PASS" &&
-echoCmd "ssh $remote_ssh \"mongodump ${up} --authenticationDatabase=admin --archive --uri='$remote_uri' >> $remote_file\"" &&
+echoCmd "ssh $remote_ssh \"mongodump ${up} --archive --uri='$remote_uri' >> $remote_file\"" &&
 
-ssh $remote_ssh "mongodump ${up} --authenticationDatabase=admin --archive --uri='$remote_uri' >> $remote_file" &&
+ssh $remote_ssh "mongodump ${up} --archive --uri='$remote_uri' >> $remote_file" &&
 
 
 # Download archive
