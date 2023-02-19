@@ -12,10 +12,11 @@
     "SSH_IP": "x.x.x.x",
     "SSH_PORT": "22",
     "SSH_KEY": "~/.ssh/key",
-    
+
     "MONGO_DB_NAME": "db-collection-name",
     "MONGO_DB_USER": "user",
     "MONGO_DB_PASS": "password",
+    "MONGO_DB_IP": "127.0.0.1",
     "MONGO_DB_PORT": "27017",
     "MONGO_URI": "authSource=admin&retryWrites=true&w=majority",
 
