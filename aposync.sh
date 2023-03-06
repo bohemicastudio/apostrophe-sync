@@ -25,17 +25,17 @@ source $scriptdir/.shared.sh
 
 
 ## Global variables
-gopass=0
+instantPass=0
 
 
 ## Handle arguments or list the options
 if [ $# -eq 2 ]; then
 
   if [ $1 == "-y" ]; then
-    gopass=1
+    instantPass=1
     type="$2"
   elif [ $2 == "-y" ]; then
-    gopass=1
+    instantPass=1
     type="$1"
   else
     echoAlert "Unexpected parameters"
@@ -76,14 +76,14 @@ fi
 Verify () {
   echoTitle "$1"
 
-  if [ $gopass == 0 ]; then
+  if [ $instantPass == 0 ]; then
     echoCmd "Run the command? ${Styling_Off}[${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
-    read go
+    read explicitPass
   fi
 
-  equalsSome "$go" "y" "yes" "Y" "Yes" "YES"
+  equalsSome "$explicitPass" "y" "yes" "Y" "Yes" "YES"
   saidYes=$?
-  if [ $gopass == 1 ] || [ $saidYes == 1 ]; then
+  if [ $instantPass == 1 ] || [ $saidYes == 1 ]; then
     return 0
   else
     echoCmd "Action prevented"
