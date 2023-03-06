@@ -36,18 +36,18 @@ SCRIPT_DIR="$(dirname "$0")"
 ENV_FILE="aposync.config.json"
 
 findConfigFile () {
-if [ ! -f "$SCRIPT_DIR/../../../$ENV_FILE" ]; then
-  if [ ! -f "$SCRIPT_DIR/$ENV_FILE" ]; then
-    echoAlert "No config file found."
-    exit 1
+  if [ ! -f "$SCRIPT_DIR/../../../$ENV_FILE" ]; then
+    if [ ! -f "$SCRIPT_DIR/$ENV_FILE" ]; then
+      echoAlert "No config file found."
+      exit 1
+    else
+      echoText "Config file found inside the package folder."
+      ENV_FILE="$SCRIPT_DIR/$ENV_FILE"
+    fi
   else
-    echoText "Config file found inside the package folder."
-    ENV_FILE="$SCRIPT_DIR/$ENV_FILE"
+    echoText "Config file found inside the project folder."
+    ENV_FILE="$SCRIPT_DIR/../../../$ENV_FILE"
   fi
-else
-  echoText "Config file found inside the project folder."
-  ENV_FILE="$SCRIPT_DIR/../../../$ENV_FILE"
-fi
 }
 
 findConfigFile;
@@ -58,16 +58,16 @@ findConfigFile;
 loadConfigObject () {
   if ! [ "$(jq -r "$1.LOCAL|tostring" $ENV_FILE)" == "null" ]; then
     for s in $(jq -r "$1.LOCAL|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
-  export "LOCAL_$s"
-done
+      export "LOCAL_$s"
+    done
   else
     echo "NO LOCAL SETTINGS OBJECT FOUND IN $ENV_FILE"
   fi
 
   if ! [ "$(jq -r "$1.REMOTE|tostring" $ENV_FILE)" == "null" ]; then
     for s in $(jq -r "$1.REMOTE|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
-  export "REMOTE_$s"
-done
+      export "REMOTE_$s"
+    done
   else
     echo "NO REMOTE SETTINGS OBJECT FOUND IN $ENV_FILE"
   fi
@@ -122,19 +122,12 @@ verifySSH () {
 
 
 
-# Helper for "$1 == $2 or $1 == $3 or $1 == $4 or .." conditions
-equalsSome () {
-  if [ $# -lt 2 ]; then
-    return 0
+# Helper for user input verification
+saysYes () {
+  if [ "$1" == "y" ] || [ "$1" == "Y" ] || [ "$1" == "ye" ] || [ "$1" == "Ye" ]  || [ "$1" == "YE" ] || [ "$1" == "yes" ] || [ "$1" == "Yes" ] || [ "$1" == "YEs" ] || [ "$1" == "YES" ]; then
+    echo "1"
+    return 1
   fi
-
-  local ask="$1"
-  shift # discard first argument from array
-  for i in $@; do
-    if [ "$ask" == "$i" ]; then
-      return 1
-    fi;
-  done
-
+  echo "0"
   return 0
 }

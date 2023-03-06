@@ -65,7 +65,7 @@ selected="${REMOTE_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
 read affi
-if [ "$affi" == "YES" ] || [ "$affi" == "yes" ] || [ "$affi" == "y" ]; then
+if [ $(saysYes "$affi") == "1" ]; then
   # pass
   echo ""
 else

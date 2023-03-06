@@ -81,9 +81,7 @@ Verify () {
     read explicitPass
   fi
 
-  equalsSome "$explicitPass" "y" "yes" "Y" "Yes" "YES"
-  saidYes=$?
-  if [ $instantPass == 1 ] || [ $saidYes == 1 ]; then
+  if [ $instantPass == 1 ] || [ $(saysYes "$explicitPass") == "1" ]; then
     return 0
   else
     echoCmd "Action prevented"
