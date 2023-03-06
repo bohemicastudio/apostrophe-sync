@@ -31,7 +31,7 @@ echoText () {
 
 
 
-# Get stand-alone settings file
+# Get config.json file
 SCRIPT_DIR="$(dirname "$0")"
 ENV_FILE="aposync.config.json"
 
@@ -54,6 +54,7 @@ findConfigFile;
 
 
 
+# Consume config.json files
 loadConfigObject () {
   if ! [ "$(jq -r "$1.LOCAL|tostring" $ENV_FILE)" == "null" ]; then
     for s in $(jq -r "$1.LOCAL|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
@@ -70,7 +71,6 @@ done
   else
     echo "NO REMOTE SETTINGS OBJECT FOUND IN $ENV_FILE"
   fi
-
 }
 
 loadConfig () {
@@ -102,6 +102,7 @@ fi
 
 
 
+# Validate SSH connection to file system
 verifySSH () {
   key=""
   if [ -z "$REMOTE_SSH_KEY" ]; then
@@ -121,6 +122,7 @@ verifySSH () {
 
 
 
+# Helper for "$1 == $2 or $1 == $3 or $1 == $4 or .." conditions
 equalsSome () {
   if [ $# -lt 2 ]; then
     return 0
