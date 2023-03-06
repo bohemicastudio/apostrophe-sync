@@ -46,6 +46,28 @@ elif [ $# -eq 1 ]; then
 
   type="$1"
 
+elif $REMOTE_SEPARATE_DATABASE; then
+  printf "${Bold_On}:: Upload actions (local → ${Italics_On}remote${Styling_Off}):${Styling_Off}\n"
+  printf "   [${Underline_On}1${Styling_Off}] Sync up database && files\n"
+  printf "       ↳ [${Underline_On}10${Styling_Off}] Sync up database\n"
+  printf "              ↳ [${Underline_On}101${Styling_Off}] Create remote backup file on local\n"
+  printf "              ↳ [${Underline_On}102${Styling_Off}] Restore remote from file on local\n"
+  printf "       ↳ [${Underline_On}11${Styling_Off}] Sync up files\n"
+  printf "              ↳ [${Underline_On}110${Styling_Off}] Sync up files - preview\n"
+  printf "              ↳ [${Underline_On}111${Styling_Off}] Sync up files - force delete\n"
+  printf "\n"
+  printf "${Bold_On}:: Actions (remote → ${Italics_On}local${Styling_Off}):${Styling_Off}\n"
+  printf "   [${Underline_On}2${Styling_Off}] Sync down database && files\n"
+  printf "       ↳ [${Underline_On}20${Styling_Off}] Sync down database\n"
+  printf "              ↳ [${Underline_On}201${Styling_Off}] Create backup file on local\n"
+  printf "              ↳ [${Underline_On}202${Styling_Off}] Restore from file on local\n"
+  printf "              ↳ [${Underline_On}203${Styling_Off}] List all backup files on local\n"
+  printf "       ↳ [${Underline_On}21${Styling_Off}] Sync down files\n"
+  printf "              ↳ [${Underline_On}210${Styling_Off}] Sync down files - preview\n"
+  printf "Enter code: "
+
+  read type
+
 else
   printf "${Bold_On}:: Upload actions (local → ${Italics_On}remote${Styling_Off}):${Styling_Off}\n"
   printf "   [${Underline_On}1${Styling_Off}] Sync up database && files\n"
@@ -90,7 +112,12 @@ Verify () {
 }
 
 
-if [ $type -eq 1 ]; then
+if [ $type -eq 1 ] && $REMOTE_SEPARATE_DATABASE; then
+  if Verify "Sync up database && files"; then
+    $scriptdir/db-up-separate.sh && $scriptdir/files-up.sh && exit 0
+  fi
+
+elif [ $type -eq 1 ]; then
   if Verify "Sync up database && files"; then
     $scriptdir/db-up.sh && $scriptdir/files-up.sh && exit 0
   fi
@@ -100,9 +127,19 @@ elif [ $type -eq 10 ]; then
     $scriptdir/db-up.sh && exit 0
   fi
 
+elif [ $type -eq 101 ] && $REMOTE_SEPARATE_DATABASE; then
+  if Verify "Create remote backup file on local"; then
+    $scriptdir/backup-remote-separate.sh && exit 0
+  fi
+
 elif [ $type -eq 101 ]; then
   if Verify "Create backup file on remote"; then
     $scriptdir/backup-remote.sh && exit 0
+  fi
+
+elif [ $type -eq 102 ] && $REMOTE_SEPARATE_DATABASE; then
+  if Verify "Restore remote from file on local"; then
+    $scriptdir/restore-remote-separate.sh && exit 0
   fi
 
 elif [ $type -eq 102 ]; then
@@ -110,7 +147,7 @@ elif [ $type -eq 102 ]; then
     $scriptdir/restore-remote.sh && exit 0
   fi
 
-elif [ $type -eq 103 ]; then
+elif [ $type -eq 103 ] && ! $REMOTE_SEPARATE_DATABASE; then
   if Verify "List all backup files on remote"; then
     $scriptdir/list-remote.sh && exit 0
   fi
