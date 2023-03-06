@@ -13,6 +13,7 @@
     "SSH_PORT": "22",
     "SSH_KEY": "~/.ssh/key",
 
+    "SEPARATE_DATABASE": false,
     "MONGO_DB_NAME": "db-collection-name",
     "MONGO_DB_USER": "user",
     "MONGO_DB_PASS": "password",
