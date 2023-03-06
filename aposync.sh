@@ -81,7 +81,9 @@ Verify () {
     read go
   fi
 
-  if [ $gopass == 1 ] || [ "$go" == "y" ] || [ "$go" == "yes" ] || [ "$go" == "Y" ] || [ "$go" == "Yes" ] || [ "$go" == "YES" ]; then
+  equalsSome "$go" "y" "yes" "Y" "Yes" "YES"
+  saidYes=$?
+  if [ $gopass == 1 ] || [ $saidYes == 1 ]; then
     return 0
   else
     echoCmd "Action prevented"

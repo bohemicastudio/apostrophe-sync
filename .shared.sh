@@ -118,3 +118,21 @@ verifySSH () {
 
   echo $key
 }
+
+
+
+equalsSome () {
+  if [ $# -lt 2 ]; then
+    return 0
+  fi
+
+  local ask="$1"
+  shift # discard first argument from array
+  for i in $@; do
+    if [ "$ask" == "$i" ]; then
+      return 1
+    fi;
+  done
+
+  return 0
+}
