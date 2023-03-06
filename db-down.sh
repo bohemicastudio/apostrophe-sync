@@ -17,7 +17,7 @@ local_file=$LOCAL_BACKUPS_FOLDER_PATH/$filename
 local_backup=$LOCAL_BACKUPS_FOLDER_PATH/$backup
 remote_file=$REMOTE_BACKUPS_FOLDER_PATH/$filename
 
-if [ $MAC_PATHS == "true" ]; then
+if $MAC_PATHS; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_file=".$local_file"
   local_backup=".$local_backup"

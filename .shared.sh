@@ -71,6 +71,19 @@ loadConfigObject () {
   else
     echo "NO REMOTE SETTINGS OBJECT FOUND IN $ENV_FILE"
   fi
+
+
+  if [ $REMOTE_SEPARATE_DATABASE == "true" ]; then
+    REMOTE_SEPARATE_DATABASE=true
+  else
+    REMOTE_SEPARATE_DATABASE=false
+  fi
+
+  if [ $MAC_PATHS == "true" ]; then
+    MAC_PATHS=true
+  else
+    MAC_PATHS=false
+  fi
 }
 
 loadConfig () {

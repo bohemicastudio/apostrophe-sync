@@ -14,7 +14,7 @@ remote_filename="${REMOTE_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && ec
 
 remote_backup="${REMOTE_BACKUPS_FOLDER_PATH}/${remote_filename}.bak"
 
-if [ $MAC_PATHS == "true" ]; then
+if $MAC_PATHS; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_file=".$local_file"
   local_backup=".$local_backup"

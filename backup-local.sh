@@ -11,7 +11,7 @@ local_filename="${LOCAL_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo
 
 local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
 
-if [ $MAC_PATHS == "true" ]; then
+if $MAC_PATHS; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   local_backup=".$local_backup"
 fi

@@ -6,7 +6,7 @@ source $scriptdir/.shared.sh
 
 
 ## Setup core variables
-if [ $MAC_PATHS == "true" ]; then
+if $MAC_PATHS; then
   # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
   LOCAL_BACKUPS_FOLDER_PATH=".$LOCAL_BACKUPS_FOLDER_PATH"
 fi
