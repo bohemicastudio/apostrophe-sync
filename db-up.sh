@@ -24,7 +24,6 @@ fi
 
 remote_address="$REMOTE_SSH_USER@$REMOTE_SSH_IP"
 remote_ssh="-t -p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
-remote_uri="mongodb://${REMOTE_MONGO_DB_USER:+$REMOTE_MONGO_DB_USER${REMOTE_MONGO_DB_PASS:+:$REMOTE_MONGO_DB_PASS}@}$REMOTE_MONGO_DB_IP${REMOTE_MONGO_DB_PORT:+:$REMOTE_MONGO_DB_PORT}/$REMOTE_MONGO_DB_NAME${REMOTE_MONGO_URI:+?$REMOTE_MONGO_URI}"
 
 
 ## Run the script
@@ -51,9 +50,9 @@ rsync -av -e "ssh -p $REMOTE_SSH_PORT $SSH_KEY" $local_file $remote_address:$rem
 
 # Backup remote copy
 echoTitle "Backup remote copy" &&
-echoCmd "ssh $remote_ssh \"mongodump --archive --uri='$remote_uri' >> $remote_bak\"" &&
+echoCmd "ssh $remote_ssh \"mongodump --archive --uri='$REMOTE_MONGO_URI' >> $remote_bak\"" &&
 
-ssh $remote_ssh "mongodump --archive --uri='$remote_uri' >> $remote_bak" &&
+ssh $remote_ssh "mongodump --archive --uri='$REMOTE_MONGO_URI' >> $remote_bak" &&
 
 
 # Apply local data to remote

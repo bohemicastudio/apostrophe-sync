@@ -18,7 +18,7 @@
     "MONGO_DB_PASS": "password",
     "MONGO_DB_IP": "127.0.0.1",
     "MONGO_DB_PORT": "27017",
-    "MONGO_URI": "authSource=admin&retryWrites=true&w=majority",
+    "MONGO_URI_EXTRAS": "authSource=admin&retryWrites=true&w=majority",
 
     "UPLOADS_FOLDER_PATH": "/var/www/html/project/public/uploads",
     "BACKUPS_FOLDER_PATH": "/var/www/html/mongodumps"
