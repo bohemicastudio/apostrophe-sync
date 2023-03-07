@@ -103,12 +103,17 @@ loadConfig;
 
 
 
+currentBackups="$LOCAL_BACKUPS_FOLDER_PATH"
+if MAC_PATHS; then
+  currentBackups=".$currentBackups"
+fi;
+
 # Create local mondodumps folder, when it does not exist
-if [ ! -d "$LOCAL_BACKUPS_FOLDER_PATH" ]; then
-  mkdir -p "$LOCAL_BACKUPS_FOLDER_PATH"
+if [ ! -d "$currentBackups" ]; then
+  mkdir -p "$currentBackups"
 
   if ! [ "$?" == 0 ]; then
-    echo "FAILED TO CREATE $LOCAL_BACKUPS_FOLDER_PATH"
+    echo "FAILED TO CREATE $currentBackups"
     exit 16
   fi
 fi
