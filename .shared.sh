@@ -41,11 +41,11 @@ findConfigFile () {
       echoAlert "No config file found."
       exit 1
     else
-      echoText "Config file found inside the package folder."
+      echoText "Config file found inside local folder."
       ENV_FILE="$SCRIPT_DIR/$ENV_FILE"
     fi
   else
-    echoText "Config file found inside the project folder."
+    echoText "Config file found inside the package folder."
     ENV_FILE="$SCRIPT_DIR/../../../$ENV_FILE"
   fi
 }
@@ -103,17 +103,41 @@ loadConfig;
 
 
 
-currentBackups="$LOCAL_BACKUPS_FOLDER_PATH"
-if MAC_PATHS; then
-  currentBackups=".$currentBackups"
-fi;
+# Setup filepaths
+if $MAC_PATHS; then
+  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
+  LOCAL_UPLOADS_FOLDER_PATH=".$LOCAL_UPLOADS_FOLDER_PATH"
+  LOCAL_BACKUPS_FOLDER_PATH=".$LOCAL_BACKUPS_FOLDER_PATH"
+fi
+
+current_timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+local_filename="${LOCAL_MONGO_DB_NAME}_${current_timestamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+remote_filename="${REMOTE_MONGO_DB_NAME}_${current_timestamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
+
+LOCAL_FILE="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}"
+LOCAL_BACKUP="${LOCAL_BACKUPS_FOLDER_PATH}/${local_filename}.bak"
+REMOTE_FILE="${REMOTE_BACKUPS_FOLDER_PATH}/${remote_filename}"
+REMOTE_BACKUP="${REMOTE_BACKUPS_FOLDER_PATH}/${remote_filename}.bak"
+REMOTE_FILE_ON_LOCAL="${LOCAL_BACKUPS_FOLDER_PATH}/${remote_filename}"
+REMOTE_BACKUP_ON_LOCAL="${LOCAL_BACKUPS_FOLDER_PATH}/${remote_filename}.bak"
+
+
+
+# Build remote URI
+if $REMOTE_SEPARATE_DATABASE; then
+  REMOTE_MONGO_URI="mongodb+srv://$REMOTE_MONGO_DB_USER:$REMOTE_MONGO_DB_PASS@$REMOTE_MONGO_DB_IP/$REMOTE_MONGO_DB_NAME"
+else
+  REMOTE_MONGO_URI="mongodb://${REMOTE_MONGO_DB_USER:+$REMOTE_MONGO_DB_USER${REMOTE_MONGO_DB_PASS:+:$REMOTE_MONGO_DB_PASS}@}$REMOTE_MONGO_DB_IP${REMOTE_MONGO_DB_PORT:+:$REMOTE_MONGO_DB_PORT}/$REMOTE_MONGO_DB_NAME${REMOTE_MONGO_URI_EXTRAS:+?$REMOTE_MONGO_URI_EXTRAS}"
+fi
+
+
 
 # Create local mondodumps folder, when it does not exist
-if [ ! -d "$currentBackups" ]; then
-  mkdir -p "$currentBackups"
+if [ ! -d "$LOCAL_BACKUPS_FOLDER_PATH" ]; then
+  mkdir -p "$LOCAL_BACKUPS_FOLDER_PATH"
 
   if ! [ "$?" == 0 ]; then
-    echo "FAILED TO CREATE $currentBackups"
+    echo "FAILED TO CREATE $LOCAL_BACKUPS_FOLDER_PATH"
     exit 16
   fi
 fi
@@ -149,12 +173,3 @@ saysYes () {
   echo "0"
   return 0
 }
-
-
-
-# Build remote URI
-if $REMOTE_SEPARATE_DATABASE; then
-  REMOTE_MONGO_URI="mongodb+srv://$REMOTE_MONGO_DB_USER:$REMOTE_MONGO_DB_PASS@$REMOTE_MONGO_DB_IP/$REMOTE_MONGO_DB_NAME"
-else
-  REMOTE_MONGO_URI="mongodb://${REMOTE_MONGO_DB_USER:+$REMOTE_MONGO_DB_USER${REMOTE_MONGO_DB_PASS:+:$REMOTE_MONGO_DB_PASS}@}$REMOTE_MONGO_DB_IP${REMOTE_MONGO_DB_PORT:+:$REMOTE_MONGO_DB_PORT}/$REMOTE_MONGO_DB_NAME${REMOTE_MONGO_URI_EXTRAS:+?$REMOTE_MONGO_URI_EXTRAS}"
-fi

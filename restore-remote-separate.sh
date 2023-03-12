@@ -5,18 +5,6 @@ scriptdir="$(dirname "$0")"
 source $scriptdir/.shared.sh
 
 
-## Setup core variables
-stamp=$(date +"%Y-%m-%d_%H-%M-%S")
-remote_filename="${REMOTE_MONGO_DB_NAME}_${stamp}$([ "$PERSONAL_TAGNAME" ] && echo "_$PERSONAL_TAGNAME").mongodump"
-local_backup="${LOCAL_BACKUPS_FOLDER_PATH}/${remote_filename}.bak"
-
-if $MAC_PATHS; then
-  # echo ":: MAC USER FOUND, DOTS ADDED TO PATHS"
-  LOCAL_BACKUPS_FOLDER_PATH=".$LOCAL_BACKUPS_FOLDER_PATH"
-  local_backup=".$local_backup"
-fi
-
-
 ## Run the script
 
 # List all available snapshots in some pretty format
@@ -56,7 +44,7 @@ selected="${LOCAL_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
 read affi
-if [ "$affi" == "YES" ] || [ "$affi" == "yes" ] || [ "$affi" == "y" ]; then
+if [ $(saysYes "$affi") == "1" ]; then
   # pass
   echo ""
 else
@@ -68,17 +56,17 @@ fi
 
 # Create local backup
 echoTitle "Backup remote database" &&
-echoCmd "mongodump --archive='$local_backup' --uri='$REMOTE_MONGO_URI'" &&
+echoCmd "mongodump --archive=\"$LOCAL_BACKUP\" --uri=\"$REMOTE_MONGO_URI\"" &&
 
-mongodump --archive="$local_backup" --uri="$REMOTE_MONGO_URI" &&
+mongodump --archive="$LOCAL_BACKUP" --uri="$REMOTE_MONGO_URI" &&
 
 
 # Apply changes
 echoTitle "Apply archived data to remote" &&
-ns="--nsInclude=$LOCAL_MONGO_DB_NAME.* --nsFrom=$LOCAL_MONGO_DB_NAME.* --nsTo=$LOCAL_MONGO_DB_NAME.*" &&
-echoCmd "mongorestore --archive='$selected' --uri='$REMOTE_MONGO_URI' --noIndexRestore --drop ${ns}" &&
+ns="--nsInclude=\"$LOCAL_MONGO_DB_NAME.*\" --nsFrom=\"$LOCAL_MONGO_DB_NAME.*\" --nsTo=\"$LOCAL_MONGO_DB_NAME.*\"" &&
+echoCmd "mongorestore --archive=\"$selected\" --uri=\"$REMOTE_MONGO_URI\" --noIndexRestore --drop ${ns}" &&
 
-mongorestore --archive="$selected" --uri="$REMOTE_MONGO_URI" --noIndexRestore --drop ${ns} &&
+mongorestore --archive="$selected" --uri="$REMOTE_MONGO_URI" --noIndexRestore --drop $ns &&
 
 
 echoTitle "DONE"

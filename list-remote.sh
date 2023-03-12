@@ -7,8 +7,6 @@ source $scriptdir/.shared.sh
 ## Verify available SSH key
 SSH_KEY="$(verifySSH)"
 
-
-## Setup core variables
 remote_address="$REMOTE_SSH_USER@$REMOTE_SSH_IP"
 remote_ssh="-p $REMOTE_SSH_PORT $remote_address $SSH_KEY"
 
