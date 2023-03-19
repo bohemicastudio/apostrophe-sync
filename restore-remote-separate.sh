@@ -40,6 +40,9 @@ do
 done
 
 echo ":: ${selected}"
+
+selectedDB=${selected%%[_.]*}
+
 selected="${LOCAL_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
@@ -63,7 +66,7 @@ mongodump --archive="$LOCAL_BACKUP" --uri="$REMOTE_MONGO_URI" &&
 
 # Apply changes
 echoTitle "Apply archived data to remote" &&
-ns="--nsInclude=\"$LOCAL_MONGO_DB_NAME.*\" --nsFrom=\"$LOCAL_MONGO_DB_NAME.*\" --nsTo=\"$LOCAL_MONGO_DB_NAME.*\"" &&
+ns="--nsInclude=\"$selectedDB.*\" --nsFrom=\"$selectedDB.*\" --nsTo=\"$LOCAL_MONGO_DB_NAME.*\"" &&
 echoCmd "mongorestore --archive=\"$selected\" --uri=\"$REMOTE_MONGO_URI\" --noIndexRestore --drop ${ns}" &&
 
 mongorestore --archive="$selected" --uri="$REMOTE_MONGO_URI" --noIndexRestore --drop $ns &&

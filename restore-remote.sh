@@ -46,6 +46,9 @@ do
 done
 
 echo ":: ${selected}"
+
+selectedDB=${selected%%[_.]*}
+
 selected="${REMOTE_BACKUPS_FOLDER_PATH}/${selected}"
 
 printf "${Yellow_On}:: Do you really wish to restore to this snapshot??${Styling_Off}\n:: [${Bold_On}y${Styling_Off}es/${Bold_On}n${Styling_Off}o] "
@@ -70,7 +73,7 @@ ssh $remote_ssh "mongodump $up --archive --uri=\"$REMOTE_MONGO_URI\" >> \"$REMOT
 
 # Apply changes
 echoTitle "Apply archived data to remote" &&
-ns="--nsInclude=\"$REMOTE_MONGO_DB_NAME.*\" --nsFrom=\"$REMOTE_MONGO_DB_NAME.*\" --nsTo=\"$REMOTE_MONGO_DB_NAME.*\"" &&
+ns="--nsInclude=\"$selectedDB.*\" --nsFrom=\"$selectedDB.*\" --nsTo=\"$REMOTE_MONGO_DB_NAME.*\"" &&
 echoCmd "mongorestore $up $ns --noIndexRestore --drop --archive=\"$selected\"" &&
 
 ssh $remote_ssh "mongorestore $up $ns --noIndexRestore --drop --archive=\"$selected\"" &&
