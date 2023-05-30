@@ -14,19 +14,16 @@ if [ $# -eq 1 ] && [ $1 == "init" ]; then
     exit 1
   else
     cp "$scriptdir/aposync.config.example.json" "$scriptdir/../../../$ENV_FILE" &&
-    printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
+      printf "${Blue_On}:: Created aposync config file!${Styling_Off} \n"
     exit 0
-  fi;
-fi;
-
+  fi
+fi
 
 ## Shared resources
 source $scriptdir/.shared.sh
 
-
 ## Global variables
 instantPass=0
-
 
 ## Handle arguments or list the options
 if [ $# -eq 2 ]; then
@@ -95,12 +92,12 @@ fi
 # Sync up database (local to remote) [this should automatically create backup for the local]
 
 # Sync down database (remote to local)
-  # Create backup file on local
-  # Restore from file on local
+# Create backup file on local
+# Restore from file on local
 
 ## Run the script
 
-Verify () {
+Verify() {
   echoTitle "$1"
 
   if [ $instantPass == 0 ]; then
@@ -115,7 +112,6 @@ Verify () {
     return 1
   fi
 }
-
 
 if $REMOTE_SEPARATE_DATABASE; then
   if [ $type -eq 1 ]; then
@@ -156,10 +152,9 @@ if $REMOTE_SEPARATE_DATABASE; then
   else
     echoAlert "Unsupported action"
     exit 2
-    fi
   fi
 
-elif !$REMOTE_SEPARATE_DATABASE; then
+else
   if [ $type -eq 1 ]; then
     if Verify "Sync up database && files"; then
       $scriptdir/db-up.sh && $scriptdir/files-up.sh && exit 0
@@ -178,6 +173,11 @@ elif !$REMOTE_SEPARATE_DATABASE; then
   elif [ $type -eq 102 ]; then
     if Verify "Restore from file on remote"; then
       $scriptdir/restore-remote.sh && exit 0
+    fi
+
+  elif [ $type -eq 103 ]; then
+    if Verify "List all backup files on remote"; then
+      $scriptdir/list-remote.sh && exit 0
     fi
 
   elif [ $type -eq 11 ]; then
