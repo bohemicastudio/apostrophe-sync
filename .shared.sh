@@ -56,20 +56,20 @@ findConfigFile;
 
 # Consume config.json files
 loadConfigObject () {
-  if ! [ "$(jq -r "$1.LOCAL|tostring" $ENV_FILE)" == "null" ]; then
-    for s in $(jq -r "$1.LOCAL|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
+  if ! [ "$(jq -r "$1.LOCAL|tostring" "$ENV_FILE")" == "null" ]; then
+    for s in $(jq -r "$1.LOCAL|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" "$ENV_FILE"); do
       export "LOCAL_$s"
     done
   else
-    echo "NO LOCAL SETTINGS OBJECT FOUND IN $ENV_FILE"
+    echo "NO LOCAL SETTINGS OBJECT FOUND IN "$ENV_FILE""
   fi
 
-  if ! [ "$(jq -r "$1.REMOTE|tostring" $ENV_FILE)" == "null" ]; then
-    for s in $(jq -r "$1.REMOTE|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" $ENV_FILE); do
+  if ! [ "$(jq -r "$1.REMOTE|tostring" "$ENV_FILE")" == "null" ]; then
+    for s in $(jq -r "$1.REMOTE|to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" "$ENV_FILE"); do
       export "REMOTE_$s"
     done
   else
-    echo "NO REMOTE SETTINGS OBJECT FOUND IN $ENV_FILE"
+    echo "NO REMOTE SETTINGS OBJECT FOUND IN "$ENV_FILE""
   fi
 
 
@@ -87,10 +87,10 @@ loadConfigObject () {
 }
 
 loadConfig () {
-  local DEFAULT=$(jq -r ".DEFAULT|tostring" $ENV_FILE)
+  local DEFAULT=$(jq -r ".DEFAULT|tostring" "$ENV_FILE")
 
-  MAC_PATHS=$(jq -r ".MAC_PATHS|tostring" $ENV_FILE)
-  PERSONAL_TAGNAME=$(jq -r ".PERSONAL_TAGNAME|tostring" $ENV_FILE)
+  MAC_PATHS=$(jq -r ".MAC_PATHS|tostring" "$ENV_FILE")
+  PERSONAL_TAGNAME=$(jq -r ".PERSONAL_TAGNAME|tostring" "$ENV_FILE")
 
   if [ "$DEFAULT" == "null" ]; then
     loadConfigObject;

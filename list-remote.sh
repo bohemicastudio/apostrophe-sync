@@ -2,7 +2,7 @@
 
 ## Shared resources
 scriptdir="$(dirname "$0")"
-source $scriptdir/.shared.sh
+source "$scriptdir/.shared.sh"
 
 ## Verify available SSH key
 SSH_KEY="$(verifySSH)"
