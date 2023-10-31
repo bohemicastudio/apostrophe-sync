@@ -129,6 +129,21 @@ if $REMOTE_SEPARATE_DATABASE; then
       "$scriptdir/restore-remote-separate.sh" && exit 0
     fi
 
+  elif [ $type -eq 11 ]; then
+    if Verify "Sync up files"; then
+      "$scriptdir/files-up.sh" && exit 0
+    fi
+
+  elif [ $type -eq 110 ]; then
+    if Verify "Sync up files - preview"; then
+      "$scriptdir/files-up.sh" -d && exit 0
+    fi
+
+  elif [ $type -eq 111 ]; then
+    if Verify "Sync up files - forced delete"; then
+      "$scriptdir/files-up.sh" -f && exit 0
+    fi
+
   elif [ $type -eq 2 ]; then
     if Verify "Sync down database && files (separate)"; then
       "$scriptdir/db-down-separate.sh" && "$scriptdir/files-down.sh" && exit 0
@@ -142,6 +157,16 @@ if $REMOTE_SEPARATE_DATABASE; then
   elif [ $type -eq 201 ]; then
     if Verify "Create backup file on local (separate)"; then
       "$scriptdir/backup-remote-separate.sh" && exit 0
+    fi
+
+  elif [ $type -eq 21 ]; then
+    if Verify "Sync down files"; then
+      "$scriptdir/files-down.sh" && exit 0
+    fi
+
+  elif [ $type -eq 210 ]; then
+    if Verify "Sync down files - preview"; then
+      "$scriptdir/files-down.sh" -d && exit 0
     fi
 
   elif [ $type -eq 102 ] || [ $type -eq 202 ]; then
